@@ -15,7 +15,7 @@ class CreatePartsTable extends Migration
     {
         Schema::create('parts', function (Blueprint $table) {
             $table->id();
-            $table->string('part_num', 20);
+            $table->string('name', 20);
             $table->foreignId('model_id')->constrained();
             $table->timestamps();
         });

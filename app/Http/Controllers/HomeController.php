@@ -22,29 +22,19 @@ class HomeController extends Controller
 
     public function getModels(Request $request)
     {
-        $models = ModelCar::where('company_id', $request->companyId)->get();
-
-        $output = '<option disabled selected value="">Select Model</option>';
-        foreach ($models as $model) {
-            $output .= '
-            <option value="' . $model->id . '">
-                    ' . $model->name . '
-            </option>';
-        };
-        return  $output;
+        if ($request->ajax()) {
+            $models = ModelCar::where('company_id', $request->companyId)->get();
+            $output = getData($models);
+        }
+        return $output;
     }
 
     public function getParts(Request $request)
     {
-        $parts = Part::where('model_id', $request->modelId)->get();
-
-        $output = '<option disabled selected value="">Select Part</option>';
-        foreach ($parts as $part) {
-            $output .= '
-            <option value="' . $part->id . '">
-                    ' . $part->part_num . '
-            </option>';
-        };
+        if ($request->ajax()) {
+            $parts = Part::where('model_id', $request->modelId)->get();
+            $output = getData($parts);
+        }
         return  $output;
     }
 }

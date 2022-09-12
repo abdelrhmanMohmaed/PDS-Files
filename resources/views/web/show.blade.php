@@ -9,7 +9,7 @@
                         <strong>
                             {{ $part->model->company->name }} -
                             {{ $part->model->name }} -
-                            {{ $part->part_num }}
+                            {{ $part->name }}
                         </strong>
                         <div class="float-left">
                             @error('file')

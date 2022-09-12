@@ -4,6 +4,20 @@ use App\Models\Packfile;
 use App\Models\Workfile;
 use App\Models\Pdsfile;
 
+
+function getData($models)
+{
+    $output = '';
+    $output = '<option disabled selected value="">Select Model</option>';
+    foreach ($models as $item) {
+        $output .= '
+    <option value="' . $item->id . '">
+            ' . $item->name . '
+    </option>';
+    };
+    return  $output;
+}
+
 function uploadImage($folder, $image)
 {
     $imgName = $image->getClientOriginalName();

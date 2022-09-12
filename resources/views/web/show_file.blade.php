@@ -13,7 +13,7 @@
                                 @endphp
                                 {{ $file['model']['company']['name'] }} -
                                 {{ $file['model']['name'] }} -
-                                {{ $file['part_num'] }} -
+                                {{ $file['name'] }} -
                                 {{ $modelName }}
                             @else
                                 <strong>No files added</strong>

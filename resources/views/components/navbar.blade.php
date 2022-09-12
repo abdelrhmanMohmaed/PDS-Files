@@ -4,7 +4,7 @@
             aria-label=".form-select-sm example">
             <option disabled selected>Open this select menu</option>
             @foreach ($parts as $item)
-                <option value="{{ $item->id }}">{{ $item->part_num }}</option>
+                <option value="{{ $item->id }}">{{ $item->name }}</option>
             @endforeach
         </select>
     </form>

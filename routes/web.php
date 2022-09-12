@@ -48,11 +48,11 @@ Route::middleware('auth')->group(function () {
 
     Route::name('user.')->group(function () {
 
-        Route::get('show', [UserController::class, 'show'])->name('show');
+        Route::get('show', [UserController::class, 'edit'])->name('show');
         Route::post('update/{user}', [UserController::class, 'update'])->name('update');
 
         Route::middleware('CheckRole')->group(function () {
-            Route::get('new/user', [UserController::class, 'add'])->name('new');
+            Route::get('new/user', [UserController::class, 'show'])->name('new');
             Route::post('new/user/store', [UserController::class,   'store'])->name('store');
         });
     });
