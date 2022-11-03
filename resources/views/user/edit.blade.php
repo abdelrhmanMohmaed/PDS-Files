@@ -27,6 +27,11 @@
                                                 class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
                                                 placeholder="Enter email">
                                         </div>
+                                        @error('email')
+                                            <span class="text-danger">
+                                                <i class="fa-solid fa-circle-exclamation"></i>
+                                                {{ $message }}</span>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -35,6 +40,11 @@
                                         <input type="password" name="password" class="form-control"
                                             id="exampleInputPassword1" placeholder="Password">
                                     </div>
+                                    @error('password')
+                                        <span class="text-danger">
+                                            <i class="fa-solid fa-circle-exclamation"></i>
+                                            {{ $message }}</span>
+                                    @enderror
                                 </div>
 
                                 <div class="mt-2">

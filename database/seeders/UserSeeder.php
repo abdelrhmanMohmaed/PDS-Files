@@ -18,15 +18,23 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'SuperAdmin',
             // 'seel_code' => '777',
-            'email' => '777',
-            'password' => Hash::make('admIn!a#'),
+            'email' => '777@777.com',
+            'password' => Hash::make('123456789'),
             'role_id' => 1,
         ]);
         User::create([
             // Ashraf Mostafa
+            'name' => 'Abdelrahman Mohamed',
+            // 'seel_code' => '4173',
+            'email' => 'Abdelrahman.Mohamed@samaya-electronics.com',
+            'password' => Hash::make('123456789'),
+            'role_id' => 1,
+        ]); 
+        User::create([
+            // Ashraf Mostafa
             'name' => 'Ashraf Mostafa',
             // 'seel_code' => '4173',
-            'email' => '4173',
+            'email' => 'ashraf.mostafa@samaya-electronics.com',
             'password' => Hash::make('4173'),
             'role_id' => 2,
         ]);

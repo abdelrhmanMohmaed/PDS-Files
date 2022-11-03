@@ -35,6 +35,6 @@ class HomeController extends Controller
             $parts = Part::where('model_id', $request->modelId)->get();
             $output = getData($parts);
         }
-        return  $output;
+        return $output;
     }
 }

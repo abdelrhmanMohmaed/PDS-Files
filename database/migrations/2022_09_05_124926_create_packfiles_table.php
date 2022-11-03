@@ -15,7 +15,7 @@ class CreatePackfilesTable extends Migration
     {
         Schema::create('packfiles', function (Blueprint $table) {
             $table->id();
-            $table->text('pack_instruction');
+            $table->text('file');
             $table->foreignId('user_id')->constrained();
             $table->foreignId('part_id')->constrained();
             $table->timestamps();

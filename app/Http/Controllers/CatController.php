@@ -12,27 +12,33 @@ class CatController extends Controller
 {
     public function index()
     {
-        $companies = Company::all();
-        $models = ModelCar::all();
+        $companies = Company::get();
+        $models = ModelCar::get();
         return view('cat.index', compact('companies', 'models'));
     }
+    
     public function store_company(Request $request)
     {
         $request->validate([
-            'company' => 'required|string|min:3|max:20|unique:companies,name',
+            'company' => 'required|string|min:3|max:50|unique:companies,name',
         ], [
             'company.unique' => 'Company already Exists'
         ]);
         try {
             Company::create(['name' => $request->company]);
-            Alert::success('New Company added successfully (' . $request->company . ')');
+
+            $request->session()->flash('success', 'New Company added successfully (' . $request->company . ')');
+            // Alert::success('New Company added successfully (' . $request->company . ')');
             return back();
         } catch (\Exception $e) {
-            Alert::error('Something is wrong please try again!!');
+
+            $request->session()->flash('wrong', 'Something is wrong please try again!!');
+            // Alert::error('Something is wrong please try again!!');
             return back();
         }
         return back();
     }
+    
     public function store_model(Request $request)
     {
         $request->validate([
@@ -46,10 +52,13 @@ class CatController extends Controller
                 'name' => $request->model,
                 'company_id' => $request->companies,
             ]);
-            Alert::success('New Model added successfully (' . $request->model . ')');
+
+            $request->session()->flash('success', 'New Model added successfully (' . $request->model . ')');
+            // Alert::success('New Model added successfully (' . $request->model . ')');
             return back();
         } catch (\Exception $e) {
-            Alert::error('Something is wrong please try again!!');
+            $request->session()->flash('wrong', 'Something is wrong please try again!!');
+            // Alert::error('Something is wrong please try again!!');
             return back();
         }
         return back();
@@ -65,12 +74,15 @@ class CatController extends Controller
         try {
             Part::create([
                 'model_id' => $request->mod,
-                'part_num' => $request->part_num,
+                'name' => $request->part_num,
             ]);
-            Alert::success('New Part added successfully (' . $request->part_num . ')');
+
+            $request->session()->flash('success', 'New Part added successfully (' . $request->part_num . ')');
+            // Alert::success('New Part added successfully (' . $request->part_num . ')');
             return back();
         } catch (\Exception $e) {
-            Alert::error('Something is wrong please try again!!');
+            $request->session()->flash('wrong', 'Something is wrong please try again!!');
+            // Alert::error('Something is wrong please try again!!');
             return back();
         }
         return back();

@@ -3,41 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Events\FileAdded;
-use App\Http\Requests\FileRequest;
 use App\Models\Part;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-class FileController extends Controller
+class VideoController extends Controller
 {
 
-    public function showfile(Part $part, $modelName)
+    public function show(Part $part, $modelName)
     {
         $model = selectModel($modelName);
-
-        if (in_array(Auth::user()->role_id, [1, 2])) {
+        if (in_array(Auth::user()->role_id,[1,2])) { 
 
             $files = $model->where('part_id', $part->id)->orderBy('id', 'DESC')->paginate(10);
-            return view('web.show_file', compact(['files', 'modelName']));
-        } else {
-            $files = $model->where('part_id', $part->id)
-                ->with(['part'])->latest('id')->first();
+ 
+            return view('web.show_video', compact(['files', 'modelName']));
 
-            return view('web.show_file', compact(['files', 'modelName']));
+        }else{
+            $files = $model->where('part_id', $part->id)
+            ->with(['part'])->latest('id')->first(); 
+            
+            return view('web.show_video', compact(['files', 'modelName']));
         }
     }
 
-    public function store(Part $part, $modelName, FileRequest $request)
-    {
-        if ($request->file('file')) {
-            $path = 'files/' . $modelName . '/';
-            $filePath = uploadImage($path, $request->file);
+    public function store(Part $part, $modelName,Request $request)
+    { 
+        if ($request->file('video')) {
+            $path = 'videos/' . $modelName . '/';
+            $filePath = uploadImage($path, $request->video);
         }
-
-        $model = selectModel($modelName);
-
+        $model = selectModel($modelName); 
         try {
             $model->file = $filePath;
             $model->user_id = Auth::user()->id;
@@ -49,8 +47,6 @@ class FileController extends Controller
             
             return back();
         } catch (Exception $e) {
-            // dd($e);
-            
             $request->session()->flash('wrong', 'Something is wrong please try again!!');
             return back();
         }
@@ -62,7 +58,7 @@ class FileController extends Controller
         $model = selectModel($modelName);
         $file = $model->where('id', $id)->first();
 
-        $path = "files/" . $modelName . '/' . $file->file;
+        $path = "videos/" . $modelName . '/' . $file->file;
 
         try {
             return Storage::download($path, substr($file->file, 11));
@@ -80,8 +76,8 @@ class FileController extends Controller
         $file = $model->where('id', $request->file_id)->first();
 
 
-        $path = "files/" . $request->name . '/' . $file->file;
-
+        $path = "videos/" . $request->name . '/' . $file->file;
+ 
         try {
             Storage::delete($path, substr($file->file, 11));
             $file->delete();
@@ -90,10 +86,19 @@ class FileController extends Controller
             
             return back();
         } catch (Exception $e) {
-
+            
             $request->session()->flash('wrong', 'Something is wrong please try again!!');
             return back();
         }
         return back();
+    }
+
+    public function watch($id, $modelName)
+    {
+        $model = selectModel($modelName);
+        $file = $model->where('id', $id)->first();
+
+        return view('web.watch',compact('file'));
+      
     }
 }

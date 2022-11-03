@@ -3,12 +3,12 @@
 use App\Models\Packfile;
 use App\Models\Workfile;
 use App\Models\Pdsfile;
-
+use App\Models\Video;
 
 function getData($models)
 {
     $output = '';
-    $output = '<option disabled selected value="">Select Model</option>';
+    $output = '<option disabled selected value="">Open this select menu</option>';
     foreach ($models as $item) {
         $output .= '
     <option value="' . $item->id . '">
@@ -41,9 +41,14 @@ function selectModel($modelName)
         case 'Workfile':
             $model = new Workfile;
             break;
+        case 'Video':
+            $model = new Video;
+            break;
         default:
             return back();
             break;
     }
     return $model;
 }
+
+ 

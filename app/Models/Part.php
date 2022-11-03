@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Part extends Model
 {
     use HasFactory;
-    protected $fillable = ['part_num', 'model_id'];
+    protected $fillable = ['name', 'model_id'];
 
     public function model()
     {
-        return $this->belongsTo(ModelCar::class);
+        return $this->belongsTo(ModelCar::class,'model_id','id');
     }
     public function pdsfiles()
     {

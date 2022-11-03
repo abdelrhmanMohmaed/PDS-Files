@@ -16,7 +16,7 @@
                                 <div>
                                     <strong>Company # :</strong>
                                     <select name="company" id="company"
-                                        class="item-select js-example-placeholder-single form-select form-select-sm mt-2"
+                                        class="item-select js-example-basic-single form-select form-select-sm mt-2"
                                         aria-label=".form-select-sm example">
                                         <option disabled selected>Open this select menu</option>
                                         @foreach ($companies as $item)
@@ -34,7 +34,7 @@
                                 <div>
                                     <strong>Model # :</strong>
                                     <select name="model" id="model"
-                                        class="item-select js-example-placeholder-single form-select form-select-sm mt-2"
+                                        class="item-select js-example-basic-single form-select form-select-sm mt-2"
                                         aria-label=".form-select-sm example">
                                         <option disabled selected>Open this select menu</option>
                                     </select>
@@ -49,7 +49,7 @@
                                 <div>
                                     <strong>Part # :</strong>
                                     <select name="part" id="part"
-                                        class="item-select js-example-placeholder-single form-select form-select-sm mt-2"
+                                        class="item-select js-example-basic-single form-select form-select-sm mt-2"
                                         aria-label=".form-select-sm example">
                                         <option disabled selected>Open this select menu</option>
                                     </select>

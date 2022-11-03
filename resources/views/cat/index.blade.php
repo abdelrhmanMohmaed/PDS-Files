@@ -19,6 +19,7 @@
                             </button>
                         </strong>
                     </div>
+
                     <div id="store-model">
                         @include('cat.add-model')
                     </div>
@@ -26,6 +27,7 @@
                         @include('cat.add-part')
                     </div>
                     <div id="store-company" class="card-body p-4">
+                        @include('inc.messages')
                         <div class="row">
                             <form method="post" action="{{ route('category.store.company') }}">
                                 @csrf

@@ -30,12 +30,13 @@ class UserController extends Controller
                 'password' => Hash::make($request->password),
                 'role_id' => $role_id,
             ]);
-            event(new NewUserAdded($user));
-            Alert::success('New user added successfully');
+            // event(new NewUserAdded($user));
+
+            $request->session()->flash('success', 'New user added successfully');
             return back();
         } catch (Exception $e) {
-            return $e;
-            Alert::error('Something is wrong please try again!!');
+            // return $e;
+            $request->session()->flash('wrong', 'Something is wrong please try again!!');
             return back();
         }
     }
@@ -48,7 +49,7 @@ class UserController extends Controller
     public function update(User $user, Request $request)
     {
         $this->validate($request, [
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'email' => ['required', 'string', 'unique:users,email,' . $user->id],
             'password' => ['required', 'string', 'min:8'],
         ]);
 
@@ -59,11 +60,11 @@ class UserController extends Controller
         $data['role_id'] = $user->role_id;
         try {
             $user->update($data);
-            Alert::success('User update successfully');
+            
             Auth::logout();
             return redirect()->route('login');
         } catch (Exception $e) {
-            Alert::error('Something is wrong please try again!!');
+            $request->session()->flash('wrong', 'Something is wrong please try again!!');
             return route('home');
         }
     }

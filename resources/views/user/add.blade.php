@@ -11,6 +11,7 @@
                         </strong>
                     </div>
                     <div class="card-body p-4">
+                        @include('inc.messages')
                         <div class="row">
                             <form method="post" action="{{ route('user.store') }}">
                                 @csrf

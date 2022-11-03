@@ -24,7 +24,7 @@
                 <div class="form-group">
                     <strong>Part Number :</strong>
                     <input type="text" name="part_num" class="form-control" id="exampleInputEmail1"
-                        aria-describedby="emailHelp" placeholder="Enter Model">
+                        aria-describedby="emailHelp" placeholder="Enter Part">
                 </div>
             </div>
             <div class="mt-2">

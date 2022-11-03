@@ -58,15 +58,21 @@
                                             {{ $item->user->name }}
                                         </td>
                                         <td>
-                                            <a href="{{ route('file.download', ['id' => $item->id, 'name' => $modelName]) }}"
+                                            <a href="{{ route('video.watch', ['id' => $item->id, 'name' => $modelName]) }}"
+                                                class="btn btn-sm btn-warning">
+                                                Watch
+                                            </a>
+                                            <a href="{{ route('video.Down', ['id' => $item->id, 'name' => $modelName]) }}"
                                                 class="btn btn-sm btn-info">
                                                 Download
                                             </a>
-                                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
-                                                data-bs-target="#DeleteModal" class="btn btn-danger"
-                                                data-file_id={{ $item->id }} data-name={{ $modelName }}>
-                                                Delete
-                                            </button>
+                                            @if (in_array(Auth::user()->role_id, [1, 2]))
+                                                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                                    data-bs-target="#DeleteModal" class="btn btn-danger"
+                                                    data-file_id={{ $item->id }} data-name={{ $modelName }}>
+                                                    Delete
+                                                </button>
+                                            @endif
                                         </td>
                                     </tbody>
                                 @endforeach
@@ -84,7 +90,12 @@
                                             {{ $files->user->name }}
                                         </td>
                                         <td>
-                                            <a href="{{ route('file.download', ['id' => $files->id, 'name' => $modelName]) }}"
+                                            <a href="{{ route('video.watch', ['id' => $files->id, 'name' => $modelName]) }}"
+                                                class="btn btn-sm btn-warning">
+                                                Watch
+                                            </a>
+                                        
+                                            <a href="{{ route('video.Down', ['id' => $files->id, 'name' => $modelName]) }}"
                                                 class="btn btn-sm btn-info">
                                                 Download
                                             </a>
@@ -104,7 +115,7 @@
                         <div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="deleteModelLabel"
                             aria-hidden="true">
                             <div class="modal-dialog">
-                                <form action="{{ route('file.delete', 'test') }}" method="post">
+                                <form action="{{ route('video.delete', 'test') }}" method="post">
                                     @csrf
                                     <div class="modal-content">
                                         <div class="modal-header w-100 text-center text-danger">

@@ -26,7 +26,7 @@
 
     <div
         style=" background-color:#33A1C9;padding: 5px;text-align: center;font-size: 25px;color: white;box-sizing: border-box;">
-        <h2>Hi, Team</h2>
+        <h2>Hi, {{ $event->files->user->name }}</h2>
     </div>
 
     <div style="float: left;padding: 20px;width: 100%;height: 300px;text-align: left;box-sizing: border-box;">

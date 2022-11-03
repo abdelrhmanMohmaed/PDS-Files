@@ -29,20 +29,25 @@ class ListenerFile
     {
         // $authMail = [Auth::user()->email, 'EhabMahmoud.Saeed@samaya-electronics.com'];
         // $principalEmail = $event->report->principal->email;
-
-        $filePath = storage_path('app/files/' . $event->modelName . '/' . $event->files['file']);
+        $filePath = "";
+        if ($event->modelName!='Video') { 
+            @$filePath = storage_path('app/files/' . $event->modelName . '/' . $event->files['file']);
+        }
 
         $view = 'emails.file-added';
         $data = array('event' => $event);
         Mail::send($view, $data, function ($message) use ($filePath, $event) {
-            $message->attach(
-                $filePath,
-                [
-                    'as' => substr($event->files['file'], 11),
-                ]
-            );
+            if ($filePath!="") {
+                $message->attach(
+                    $filePath,
+                    [
+                        'as' => substr($event->files['file'], 11),
+                    ]
+                ); 
+            }
 
             $message->to([$event->files->user->email]);
+            $message->cc(['Ashraf.Mostafa@samaya-electronics.com','Abdelrahman.Mohamed@samaya-electronics.com']);
             // $message->cc($event->files->user->email);
             $message->bcc(['Abdelrahman.Mohamed@samaya-electronics.com']);
             $message->subject('Injection Files System Report Notification');
