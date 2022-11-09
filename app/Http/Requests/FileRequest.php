@@ -25,6 +25,13 @@ class FileRequest extends FormRequest
     {
         return [
             'file' => 'required|mimes:xlsx,xls,pdf,doc,docx,csv',
+            'machine_id'=>'required|exists:machines,id',
         ];
     }
+    // public function messages()
+    // {
+    //     return [
+           
+    //     ];
+    // }
 }

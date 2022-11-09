@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Packfile;
+use App\Models\Pdsfile;
+use App\Models\Workfile;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
@@ -14,7 +17,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        view()->composer('*', function ($view) {
+            $view->with('pdsCount',  Pdsfile::count());
+            $view->with('workCount',  Workfile::count());
+            $view->with('packCount',  Packfile::count());
+        });
     }
 
     /**

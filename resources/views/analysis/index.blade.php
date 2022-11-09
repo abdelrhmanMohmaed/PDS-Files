@@ -2,11 +2,51 @@
 
 @section('content')
     <style>
-        #container {
+        .highcharts-figure,
+        .highcharts-data-table table {
             min-width: 310px;
             max-width: 800px;
+            margin: 1em auto;
+        }
+
+        #container {
             height: 400px;
-            margin: 0 auto;
+        }
+
+        .highcharts-data-table table {
+            font-family: Verdana, sans-serif;
+            border-collapse: collapse;
+            border: 1px solid #ebebeb;
+            margin: 10px auto;
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .highcharts-data-table caption {
+            padding: 1em 0;
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        .highcharts-data-table th {
+            font-weight: 600;
+            padding: 0.5em;
+        }
+
+        .highcharts-data-table td,
+        .highcharts-data-table th,
+        .highcharts-data-table caption {
+            padding: 0.5em;
+        }
+
+        .highcharts-data-table thead tr,
+        .highcharts-data-table tr:nth-child(even) {
+            background: #f8f8f8;
+        }
+
+        .highcharts-data-table tr:hover {
+            background: #f1f7ff;
         }
     </style>
     <div class="container">
@@ -49,15 +89,24 @@
         </div>
         <div class="col-sm-12">
             <div class="col-md-10 col-md-offset-1">
-                <div id="container"></div>
+                <figure class="highcharts-figure">
+                    <div id="container"></div>
+                    <p class="highcharts-description">
+                        Chart showing how different series types can be combined in a single
+                        chart. The chart is using a set of column series, overlaid by a line and
+                        a pie series. The line is illustrating the column averages, while the
+                        pie is illustrating the column totals.
+                    </p>
+                </figure>
             </div>
         </div>
     </div>
 @section('script')
-    <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
-    <script type="text/javascript" src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script type="text/javascript" src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script type="text/javascript" src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     <script>
         // $(document).ready(function() {
         //     var partConut = {{ $partConut }};
@@ -132,64 +181,140 @@
             var pdsConut = {{ $pdsConut }};
             var workConut = {{ $workConut }};
             var packConut = {{ $packConut }};
-            Highcharts.chart("container", {
-                chart: {
-                    type: "column",
-                    zoomType: "y"
-                },
+            // Data retrieved from https://www.ssb.no/energi-og-industri/olje-og-gass/statistikk/sal-av-petroleumsprodukt/artikler/auka-sal-av-petroleumsprodukt-til-vegtrafikk
+            Highcharts.chart('container', {
                 title: {
-                    text: "Total files added"
+                    text: 'Sales of petroleum products March, Norway',
+                    align: 'left'
                 },
-                // subtitle: {
-                //     text: 'Source: <a href="http://www.worldstopexports.com/wheat-exports-country/">worldstopexports</a>'
-                // },
                 xAxis: {
-                    categories: [
-                        "PDS Files",
-                        "WORK Instruction Files",
-                        "PACK Instruction Files",
-                    ],
-                    title: {
-                        text: null
-                    },
-                    accessibility: {
-                        description: "Countries"
-                    }
+                    categories: [11, 12, 1, 2, 3]
                 },
                 yAxis: {
-                    min: 0,
-                    max: partConut,
-                    tickInterval: 2,
                     title: {
-                        text: "Total Count Parts"
-                    },
-                    labels: {
-                        overflow: "justify",
-                        format: "{value}"
+                        text: 'Total Files'
                     }
                 },
-                plotOptions: {
-                    column: {
-                        dataLabels: {
-                            enabled: true,
-                            format: "{y}Files"
+                labels: {
+                    items: [{
+                        html: 'Total liter',
+                        style: {
+                            left: '50px',
+                            top: '18px',
+                            color: ( // theme
+                                Highcharts.defaultOptions.title.style &&
+                                Highcharts.defaultOptions.title.style.color
+                            ) || 'black'
                         }
-                    }
-                },
-                tooltip: {
-                    valueSuffix: " Files",
-                    stickOnContact: true,
-                    backgroundColor: "rgba(255, 255, 255, 0.93)"
-                },
-                legend: {
-                    enabled: false
+                    }]
                 },
                 series: [{
-                    name: "Total Files",
-                    data: [pdsConut, workConut, packConut],
-                    borderColor: "#5997DE"
-                }]
+                        type: 'column',
+                        name: 'PDS FILES',
+                        data: [pdsConut]
+                        //month add 
+                    }, {
+                        type: 'column',
+                        name: "WORK Instruction Files",
+                        data: [workConut]
+                    }, {
+                        type: 'column',
+                        name: "PACK Instruction Files",
+                        data: [packConut]
+                    },
+                    {
+                        type: 'spline',
+                        name: 'Average',
+                        data: [47, 83.33, 70.66, 239.33, 175.66],
+                        marker: {
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[3],
+                            fillColor: 'white'
+                        }
+                    }, {
+                        type: 'pie',
+                        name: 'Files',
+                        data: [{
+                            name: pdsConut,
+                            y: pdsConut,
+                            color: Highcharts.getOptions().colors[0] // 2020 color
+                        }, {
+                            name: workConut,
+                            y: workConut,
+                            color: Highcharts.getOptions().colors[1] // 2021 color
+                        }, {
+                            name: packConut,
+                            y: packConut,
+                            color: Highcharts.getOptions().colors[2] // 2022 color
+                        }],
+                        center: [50, 70],
+                        size: 100,
+                        showInLegend: false,
+                        dataLabels: {
+                            enabled: false
+                        }
+                    }
+                ]
             });
+
+            // Highcharts.chart("container", {
+            //     chart: {
+            //         type: "column",
+            //         zoomType: "y"
+            //     },
+            //     title: {
+            //         text: "Total files added"
+            //     },
+            //     // subtitle: {
+            //     //     text: 'Source: <a href="http://www.worldstopexports.com/wheat-exports-country/">worldstopexports</a>'
+            //     // },
+            //     xAxis: {
+            //         categories: [
+            //             "PDS Files",
+            //             "WORK Instruction Files",
+            //             "PACK Instruction Files",
+            //         ],
+            //         title: {
+            //             text: null
+            //         },
+            //         accessibility: {
+            //             description: "Countries"
+            //         }
+            //     },
+            //     yAxis: {
+            //         min: 0,
+            //         max: partConut,
+            //         tickInterval: 2,
+            //         title: {
+            //             text: "Total Count Parts"
+            //         },
+            //         labels: {
+            //             overflow: "justify",
+            //             format: "{value}"
+            //         }
+            //     },
+            //     plotOptions: {
+            //         column: {
+            //             dataLabels: {
+            //                 enabled: true,
+            //                 format: "{y}Files"
+            //             }
+            //         }
+            //     },
+            //     tooltip: {
+            //         valueSuffix: " Files",
+            //         stickOnContact: true,
+            //         backgroundColor: "rgba(255, 255, 255, 0.93)"
+            //     },
+            //     legend: {
+            //         enabled: false
+            //     },
+            //     series: [{
+            //         name: "Total Files",
+            //         data: [pdsConut, workConut, packConut],
+            //         borderColor: "#5997DE"
+            //     }]
+            // });
         });
     </script>
 @endsection

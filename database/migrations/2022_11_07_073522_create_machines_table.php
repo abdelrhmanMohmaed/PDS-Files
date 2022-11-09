@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWorkfilesTable extends Migration
+class CreateMachinesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class CreateWorkfilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('workfiles', function (Blueprint $table) {
+        Schema::create('machines', function (Blueprint $table) {
             $table->id();
-            $table->text('file');
-            $table->date('month');
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('part_id')->constrained();
+            $table->smallInteger('number');
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ class CreateWorkfilesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('workfiles');
+        Schema::dropIfExists('machines');
     }
 }

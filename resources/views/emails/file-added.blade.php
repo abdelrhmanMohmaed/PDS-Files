@@ -43,6 +43,12 @@
                 </span>
             </li>
 
+            <li>Machine Number:
+                <span style="color:#33A1C9;">
+                    {{ @$event->files->machine->number }}
+                </span>
+            </li>
+
             <li>Created at: <span style="color:#33A1C9;">
                     <i>{{ \Carbon\Carbon::parse($event->files->created_at)->format('d M, Y / H:i:s') }}</i>
                 </span>

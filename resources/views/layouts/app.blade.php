@@ -31,6 +31,7 @@
 </head>
 
 <body>
+
     <section id="bg">
         <div id="home">
             <div id="app">
@@ -55,6 +56,9 @@
                             <!-- Left Side Of Navbar -->
                             <div class="navbar-nav ms-auto">
                                 @auth
+                                    {{-- <div class="m-2">
+                                        <x-machine></x-machine>
+                                    </div> --}}
                                     <div class="mt-2">
                                         <x-navbar></x-navbar>
                                     </div>
@@ -94,7 +98,7 @@
                                                         </a>
                                                     @endif
                                                     <a class="dropdown-item" href="{{ route('category.new') }}">
-                                                        Add Category
+                                                        Categories
                                                     </a>
                                                     <a class="dropdown-item" href="{{ route('user.show') }}">
                                                         Edit Profile
@@ -118,8 +122,30 @@
                                 </ul>
                             </div>
                         </div>
-                </nav>
 
+                        @auth
+                            <ul class="navbar-nav ms-auto">
+                                <li class="nav-item dropdown">
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        Count
+                                    </a>
+
+                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="#">
+                                            PDS: <strong> {{ $pdsCount }}</strong>
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            WORK: <strong> {{ $workCount }}</strong>
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            PACK: <strong> {{ $packCount }}</strong>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        @endauth
+                </nav>
                 <main class="py-4">
                     @yield('content')
                 </main>
@@ -133,7 +159,18 @@
         $(document).ready(function() {
             $('.js-example-basic-single').select2();
         });
+
+        $('body').on('click', '#submit', function() {
+            $(this).css('cursor', 'not-allowed');
+            $('#store').fadeOut(50);
+            $('#loader').css('display', 'block');
+            $('#loaderGif').append(`
+            <img src="{{ url('asset/img/load.gif') }}">
+            `);
+        });
+
         $("#success-Alert").fadeOut(2500);
+
         $('#search').change(function() {
             if ($(this).val() != '') {
                 var partId = $(this).val();
@@ -141,6 +178,9 @@
             top.location.href = '{{ url('') }}' + '/show/' + partId;
             $('.item-select').value = "";
         });
+
+
+
 
         function modalLoader(type, Router, div_name, title, ModalTitle, data) {
             $("#" + div_name).empty();

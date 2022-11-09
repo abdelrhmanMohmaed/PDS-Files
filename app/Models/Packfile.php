@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Packfile extends Model
 {
     use HasFactory;
-    protected $fillable = ['file', 'user_id', 'part_id'];
+    protected $fillable = ['file', 'user_id', 'part_id', 'machine_id'];
 
     public function user()
     {
@@ -17,5 +17,9 @@ class Packfile extends Model
     public function part()
     {
         return $this->belongsTo(Part::class);
+    }
+    public function machine()
+    {
+        return $this->belongsTo(Machine::class);
     }
 }

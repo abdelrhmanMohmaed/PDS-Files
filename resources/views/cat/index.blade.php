@@ -8,6 +8,9 @@
                     <div class="card-header bg-info">
                         <strong>
                             Add New Categories
+                            <a href="{{ route('category.edit') }}" class="btn btn-sm btn-dark float-end mx-1">
+                                All categories
+                            </a>
                             <button id="new-part" type="button" class="btn btn-sm btn-light float-end">
                                 Add Part
                             </button>
@@ -21,10 +24,10 @@
                     </div>
 
                     <div id="store-model">
-                        @include('cat.add-model')
+                        @include('cat.inc.add-model')
                     </div>
                     <div id="store-part">
-                        @include('cat.add-part')
+                        @include('cat.inc.add-part')
                     </div>
                     <div id="store-company" class="card-body p-4">
                         @include('inc.messages')

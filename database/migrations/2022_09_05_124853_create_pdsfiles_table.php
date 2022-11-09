@@ -16,6 +16,7 @@ class CreatePdsfilesTable extends Migration
         Schema::create('pdsfiles', function (Blueprint $table) {
             $table->id();
             $table->text('file');
+            $table->date('month');
             $table->foreignId('user_id')->constrained();
             $table->foreignId('part_id')->constrained();
             $table->timestamps();

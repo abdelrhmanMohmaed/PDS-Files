@@ -2,10 +2,10 @@
 
 namespace App\View\Components;
 
-use App\Models\Part;
+use App\Models\Machine as ModelsMachine;
 use Illuminate\View\Component;
 
-class navbar extends Component
+class machine extends Component
 {
     /**
      * Create a new component instance.
@@ -24,7 +24,7 @@ class navbar extends Component
      */
     public function render()
     {
-        $parts = Part::get();
-        return view('components.navbar', compact('parts'));
+        $machines = ModelsMachine::get();
+        return view('components.machine', compact('machines'));
     }
 }

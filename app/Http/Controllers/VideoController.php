@@ -15,38 +15,44 @@ class VideoController extends Controller
     public function show(Part $part, $modelName)
     {
         $model = selectModel($modelName);
-        if (in_array(Auth::user()->role_id,[1,2])) { 
+        if (in_array(Auth::user()->role_id, [1, 2])) {
 
             $files = $model->where('part_id', $part->id)->orderBy('id', 'DESC')->paginate(10);
- 
-            return view('web.show_video', compact(['files', 'modelName']));
 
-        }else{
+            return view('web.files.show_video', compact(['files', 'modelName']));
+        } else {
             $files = $model->where('part_id', $part->id)
-            ->with(['part'])->latest('id')->first(); 
-            
-            return view('web.show_video', compact(['files', 'modelName']));
+                ->with(['part'])->latest('id')->first();
+
+            return view('web.files.show_video', compact(['files', 'modelName']));
         }
     }
 
-    public function store(Part $part, $modelName,Request $request)
-    { 
+    public function store(Part $part, $modelName, Request $request)
+    {
+        $request->validate([
+            'title' => 'required|',
+            'video' => 'required|',
+        ]);
+
         if ($request->file('video')) {
             $path = 'videos/' . $modelName . '/';
             $filePath = uploadImage($path, $request->video);
         }
-        $model = selectModel($modelName); 
+        $model = selectModel($modelName);
         try {
             $model->file = $filePath;
+            $model->title = $request->title;
             $model->user_id = Auth::user()->id;
             $model->part_id = $part->id;
             $model->save();
 
             event(new FileAdded($model, $modelName));
             $request->session()->flash('success', 'New file added successfully');
-            
+
             return back();
         } catch (Exception $e) {
+            return $e;
             $request->session()->flash('wrong', 'Something is wrong please try again!!');
             return back();
         }
@@ -63,10 +69,22 @@ class VideoController extends Controller
         try {
             return Storage::download($path, substr($file->file, 11));
         } catch (Exception $e) {
-            
+
             $request->session()->flash('wrong', 'Something is wrong please try again!!');
             return back();
         }
+        return back();
+    }
+
+    public function update(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|unique:videos,title',
+        ]);
+        $model = selectModel($request->name);
+        $model->where('id', $request->file_id)->update(['title' => $request->title]);
+
+        $request->session()->flash('success', 'Title updated successfully');
         return back();
     }
 
@@ -77,16 +95,16 @@ class VideoController extends Controller
 
 
         $path = "videos/" . $request->name . '/' . $file->file;
- 
+
         try {
             Storage::delete($path, substr($file->file, 11));
             $file->delete();
 
             $request->session()->flash('success', 'File deleted successfully');
-            
+
             return back();
         } catch (Exception $e) {
-            
+
             $request->session()->flash('wrong', 'Something is wrong please try again!!');
             return back();
         }
@@ -98,7 +116,6 @@ class VideoController extends Controller
         $model = selectModel($modelName);
         $file = $model->where('id', $id)->first();
 
-        return view('web.watch',compact('file'));
-      
+        return view('web.files.watch', compact('file'));
     }
 }

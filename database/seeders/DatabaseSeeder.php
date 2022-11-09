@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Database\Factories\MachineFactory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -19,7 +20,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             CompanySeeder::class,
             ModelSeeder::class,
-            PartSeeder::class
+            PartSeeder::class,
+            MachineSeeder::class,
         ]);
     }
 }

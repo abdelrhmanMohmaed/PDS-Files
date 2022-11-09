@@ -27,8 +27,7 @@ class ListenerFile
      */
     public function handle($event)
     {
-        // $authMail = [Auth::user()->email, 'EhabMahmoud.Saeed@samaya-electronics.com'];
-        // $principalEmail = $event->report->principal->email;
+        
         $filePath = "";
         if ($event->modelName!='Video') { 
             @$filePath = storage_path('app/files/' . $event->modelName . '/' . $event->files['file']);
@@ -49,7 +48,7 @@ class ListenerFile
             $message->to([$event->files->user->email]);
             $message->cc(['Ashraf.Mostafa@samaya-electronics.com','Abdelrahman.Mohamed@samaya-electronics.com']);
             // $message->cc($event->files->user->email);
-            $message->bcc(['Abdelrahman.Mohamed@samaya-electronics.com']);
+            $message->bcc(['Anthony.Farah@samaya-electronics.com']);
             $message->subject('Injection Files System Report Notification');
             $message->from('EPD-Notifications@samaya-electronics.com', 'Engineering Program Development');
         });

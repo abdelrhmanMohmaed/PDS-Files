@@ -41,9 +41,11 @@ Route::middleware('auth')->group(function () {
 
     Route::controller(FileController::class)->name('file.')->group(
         function () {
+            // Route::get('show/machine/{machine}', 'showFileMachine')->name('show.machine');
 
             Route::get('show/file/{part}/{name}', 'showfile')->name('show');
             Route::post('store/file/{part}/{name}', 'store')->name('store');
+            Route::post('update', 'update')->name('update');
             Route::get('download/{id}/{name}', 'download')->name('download');
 
             Route::post('delete', 'delete')->name('delete')->middleware('CheckRole');
@@ -59,13 +61,7 @@ Route::middleware('auth')->group(function () {
             Route::get('watch/{id}/{name}', 'watch')->name('watch');
 
             Route::post('del', 'delete')->name('delete')->middleware('CheckRole');
-        }
-    );
-
-    Route::controller(AnalysisController::class)->name('analysis.')->group(
-        function () {
-
-            Route::get('analysis', 'index')->name('index');
+            Route::post('edit/title', 'update')->name('update')->middleware('CheckRole');
         }
     );
 
@@ -89,6 +85,23 @@ Route::middleware('auth')->group(function () {
             Route::post('store/company', 'store_company')->name('store.company');
             Route::post('store/model', 'store_model')->name('store.model');
             Route::post('store/part', 'store_part')->name('store.part');
+            Route::get('edit', 'edit')->name('edit');
+            Route::post('part/edit', 'update_part')->name('edit.part');
+            Route::post('part/delete', 'delete_part')->name('delete.part');
+
+            Route::post('model/edit', 'update_model')->name('edit.model');
+            Route::post('model/delete', 'delete_model')->name('delete.model');
+
+            Route::post('company/edit', 'update_company')->name('edit.company');
+            Route::post('company/delete', 'delete_company')->name('delete.company');
+        }
+    );
+
+
+    Route::controller(AnalysisController::class)->name('analysis.')->group(
+        function () {
+
+            Route::get('analysis', 'index')->name('index');
         }
     );
 });

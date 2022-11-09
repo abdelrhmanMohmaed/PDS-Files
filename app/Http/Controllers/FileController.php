@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Events\FileAdded;
 use App\Http\Requests\FileRequest;
+use App\Models\Machine;
 use App\Models\Part;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,42 +21,63 @@ class FileController extends Controller
 
         if (in_array(Auth::user()->role_id, [1, 2])) {
 
+            $machines = Machine::get();
+
             $files = $model->where('part_id', $part->id)->orderBy('id', 'DESC')->paginate(10);
-            return view('web.show_file', compact(['files', 'modelName']));
+            return view('web.files.show_file', compact(['files', 'modelName', 'machines']));
         } else {
             $files = $model->where('part_id', $part->id)
                 ->with(['part'])->latest('id')->first();
 
-            return view('web.show_file', compact(['files', 'modelName']));
+            return view('web.files.show_file', compact(['files', 'modelName']));
         }
     }
 
     public function store(Part $part, $modelName, FileRequest $request)
     {
+
         if ($request->file('file')) {
             $path = 'files/' . $modelName . '/';
             $filePath = uploadImage($path, $request->file);
         }
 
         $model = selectModel($modelName);
+        $week = date("W", strtotime(Carbon::now()));
 
         try {
             $model->file = $filePath;
             $model->user_id = Auth::user()->id;
             $model->part_id = $part->id;
+            $model->machine_id = $request->machine_id;
+            $model->week =  $week;
             $model->save();
 
             event(new FileAdded($model, $modelName));
             $request->session()->flash('success', 'New file added successfully');
-            
-            return back();
+
+            return redirect()->route("get.show", [$part->id]);
         } catch (Exception $e) {
             // dd($e);
-            
             $request->session()->flash('wrong', 'Something is wrong please try again!!');
-            return back();
+            return redirect()->route("get.show", [$part->id]);
         }
-        return  back();
+        return redirect()->route("get.show", [$part->id]);
+    }
+
+    public function update(Request $request)
+    {
+        $request->validate([
+            'machine' => 'required|exists:machines,id',
+        ]);
+
+        $model = selectModel($request->name);
+
+        $model->where('id', $request->id)->update([
+            'machine_id' => $request->machine
+        ]);
+
+        $request->session()->flash('success', 'Updated successfully');
+        return back();
     }
 
     public function download($id, $modelName, Request $request)
@@ -67,7 +90,7 @@ class FileController extends Controller
         try {
             return Storage::download($path, substr($file->file, 11));
         } catch (Exception $e) {
-            
+
             $request->session()->flash('wrong', 'Something is wrong please try again!!');
             return back();
         }
@@ -87,7 +110,7 @@ class FileController extends Controller
             $file->delete();
 
             $request->session()->flash('success', 'File deleted successfully');
-            
+
             return back();
         } catch (Exception $e) {
 
