@@ -50,53 +50,14 @@
         }
     </style>
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-sm-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title"><strong>PDS Files:</strong></h5>
-
-                        <div class="d-flex bd-highlight mb-3">
-                            <div class="p-2 bd-highlight">
-                                <p class="card-text">Count: {{ $pdsConut }}</p>
-                            </div>
-                            <div class="ms-auto  p-2 bd-highlight">
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="row">
+            <div class="mt-5">
+                <br><br><br><br><br>
             </div>
-            <div class="col-sm-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title"><strong>Work Instruction:</strong></h5>
 
-                        <div class="d-flex bd-highlight mb-3">
-                            <div class="p-2 bd-highlight">
-                                <p class="card-text">Count: {{ $workConut }}</p>
-                            </div>
-                            <div class="ms-auto  p-2 bd-highlight">
-                                <div class="w-100 h-100 bg-dark rounded-circle">
-                                    <a href="#" class="btn btn-primary">Go somewhere</a>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-12">
-            <div class="col-md-10 col-md-offset-1">
+            <div class="col-md-12 ">
                 <figure class="highcharts-figure">
                     <div id="container"></div>
-                    <p class="highcharts-description">
-                        Chart showing how different series types can be combined in a single
-                        chart. The chart is using a set of column series, overlaid by a line and
-                        a pie series. The line is illustrating the column averages, while the
-                        pie is illustrating the column totals.
-                    </p>
                 </figure>
             </div>
         </div>
@@ -108,214 +69,74 @@
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     <script>
-        // $(document).ready(function() {
-        //     var partConut = {{ $partConut }};
-        //     var pdsConut = {{ $pdsConut }};
-        //     var packConut = {{ $packConut }};
-        //     var workConut = {{ $workConut }};
-
-        //     Highcharts.chart('container', {
-        //         colors: [
-        //             '#01BAF2',
-        //             '#f6fa4b',
-        //             '#FAA74B',
-        //             '#baf201',
-        //             '#f201ba'
-        //         ],
-        //         chart: {
-        //             type: 'pie'
-        //         },
-        //         title: {
-        //             text: 'PDS FILES COUNT'
-        //         },
-        //         tooltip: {
-        //             valueSuffix: '%'
-        //         },
-        //         subtitle: {
-        //             text: 'Source:<a href="https://www.mdpi.com/2072-6643/11/3/684/htm" target="_default">MDPI</a>'
-        //         },
-        //         plotOptions: {
-        //             pie: {
-        //                 allowPointSelect: true,
-        //                 cursor: 'pointer',
-        //                 dataLabels: {
-        //                     enabled: true,
-        //                     format: '{point.name}: {point.percentage:.1f}%'
-        //                 },
-        //                 showInLegend: true
-        //             }
-        //         },
-        //         series: [{
-        //             name: 'Percentage',
-        //             colorByPoint: true,
-        //             data: [{
-        //                     name: 'Total Parts',
-        //                     sliced: true,
-        //                     selected: true,
-        //                     y: partConut
-        //                 },
-        //                 {
-        //                     name: 'PDS FILES',
-        //                     y: pdsConut
-        //                 },
-
-        //                 {
-        //                     name: 'PACK FILES',
-        //                     y: packConut
-        //                 },
-        //                 {
-        //                     name: 'WORK FILES',
-        //                     y: workConut
-        //                 },
-        //                 // {
-        //                 //     name: 'Ash',
-        //                 //     y: 1.68
-        //                 // }
-        //             ]
-        //         }]
-        //     });
-        // });
-
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
         $(document).ready(function() {
-            var partConut = {{ $partConut }};
-            var pdsConut = {{ $pdsConut }};
-            var workConut = {{ $workConut }};
-            var packConut = {{ $packConut }};
-            // Data retrieved from https://www.ssb.no/energi-og-industri/olje-og-gass/statistikk/sal-av-petroleumsprodukt/artikler/auka-sal-av-petroleumsprodukt-til-vegtrafikk
-            Highcharts.chart('container', {
-                title: {
-                    text: 'Sales of petroleum products March, Norway',
-                    align: 'left'
+            $.ajax({
+                url: '{{ url('') }}/' + 'get/analysis',
+                type: 'get',
+                dataType: 'json',
+                success: function(data) {
+                    getData(data)
+                }
+            });
+        });
+    </script>
+
+    <script>
+        function getData(data) {
+            var chart = Highcharts.chart('container', {
+                chart: {
+                    type: 'column'
                 },
+                title: {
+                    text: 'Five Weeks Analysis'
+                },
+                // subtitle: {
+                //     text: 'Source: ' +
+                //         '<a href="https://www.ssb.no/en/statbank/table/08940/" ' +
+                //         'target="_blank">SSB</a>'
+                // },
                 xAxis: {
-                    categories: [11, 12, 1, 2, 3]
+                    labels: {
+                        x: -10
+                    },
+                    categories: data.xaxis.weeks,
+                    crosshair: true
                 },
                 yAxis: {
                     title: {
-                        text: 'Total Files'
+                        useHTML: true,
+                        text: 'Count of files per week'
                     }
                 },
-                labels: {
-                    items: [{
-                        html: 'Total liter',
-                        style: {
-                            left: '50px',
-                            top: '18px',
-                            color: ( // theme
-                                Highcharts.defaultOptions.title.style &&
-                                Highcharts.defaultOptions.title.style.color
-                            ) || 'black'
-                        }
-                    }]
-                },
-                series: [{
-                        type: 'column',
-                        name: 'PDS FILES',
-                        data: [pdsConut]
-                        //month add 
-                    }, {
-                        type: 'column',
-                        name: "WORK Instruction Files",
-                        data: [workConut]
-                    }, {
-                        type: 'column',
-                        name: "PACK Instruction Files",
-                        data: [packConut]
-                    },
-                    {
-                        type: 'spline',
-                        name: 'Average',
-                        data: [47, 83.33, 70.66, 239.33, 175.66],
-                        marker: {
-                            lineWidth: 2,
-                            lineColor: Highcharts.getOptions().colors[3],
-                            fillColor: 'white'
-                        }
-                    }, {
-                        type: 'pie',
-                        name: 'Files',
-                        data: [{
-                            name: pdsConut,
-                            y: pdsConut,
-                            color: Highcharts.getOptions().colors[0] // 2020 color
-                        }, {
-                            name: workConut,
-                            y: workConut,
-                            color: Highcharts.getOptions().colors[1] // 2021 color
-                        }, {
-                            name: packConut,
-                            y: packConut,
-                            color: Highcharts.getOptions().colors[2] // 2022 color
-                        }],
-                        center: [50, 70],
-                        size: 100,
-                        showInLegend: false,
-                        dataLabels: {
-                            enabled: false
-                        }
+                // tooltip: {
+                //     headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                //     pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                //         '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                //     footerFormat: '</table>',
+                //     shared: true,
+                //     useHTML: true
+                // },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.1,
+                        borderWidth: 0
                     }
-                ]
-            });
+                },
 
-            // Highcharts.chart("container", {
-            //     chart: {
-            //         type: "column",
-            //         zoomType: "y"
-            //     },
-            //     title: {
-            //         text: "Total files added"
-            //     },
-            //     // subtitle: {
-            //     //     text: 'Source: <a href="http://www.worldstopexports.com/wheat-exports-country/">worldstopexports</a>'
-            //     // },
-            //     xAxis: {
-            //         categories: [
-            //             "PDS Files",
-            //             "WORK Instruction Files",
-            //             "PACK Instruction Files",
-            //         ],
-            //         title: {
-            //             text: null
-            //         },
-            //         accessibility: {
-            //             description: "Countries"
-            //         }
-            //     },
-            //     yAxis: {
-            //         min: 0,
-            //         max: partConut,
-            //         tickInterval: 2,
-            //         title: {
-            //             text: "Total Count Parts"
-            //         },
-            //         labels: {
-            //             overflow: "justify",
-            //             format: "{value}"
-            //         }
-            //     },
-            //     plotOptions: {
-            //         column: {
-            //             dataLabels: {
-            //                 enabled: true,
-            //                 format: "{y}Files"
-            //             }
-            //         }
-            //     },
-            //     tooltip: {
-            //         valueSuffix: " Files",
-            //         stickOnContact: true,
-            //         backgroundColor: "rgba(255, 255, 255, 0.93)"
-            //     },
-            //     legend: {
-            //         enabled: false
-            //     },
-            //     series: [{
-            //         name: "Total Files",
-            //         data: [pdsConut, workConut, packConut],
-            //         borderColor: "#5997DE"
-            //     }]
-            // });
-        });
+            });
+            for (i in data.series) {
+                chart.addSeries({
+                    name: data.series[i].name,
+                    data: data.series[i].data,
+                });
+            }
+
+        }
     </script>
 @endsection
 @endsection

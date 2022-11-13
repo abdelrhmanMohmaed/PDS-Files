@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Packfile extends Model
 {
     use HasFactory;
-    protected $fillable = ['file', 'user_id', 'part_id', 'machine_id'];
+    protected $fillable = ['file', 'week','user_id', 'part_id', 'machine_id'];
 
     public function user()
     {

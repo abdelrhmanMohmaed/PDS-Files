@@ -179,9 +179,6 @@
             $('.item-select').value = "";
         });
 
-
-
-
         function modalLoader(type, Router, div_name, title, ModalTitle, data) {
             $("#" + div_name).empty();
             $("#" + div_name).html("Loading.....");

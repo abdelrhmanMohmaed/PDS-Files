@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Workfile extends Model
 {
     use HasFactory;
-    protected $fillable = ['file', 'user_id', 'part_id','machine_id'];
+    protected $fillable = ['file', 'week', 'user_id', 'part_id', 'machine_id'];
 
     public function user()
     {
@@ -25,4 +25,3 @@ class Workfile extends Model
         return $this->belongsTo(Machine::class);
     }
 }
-

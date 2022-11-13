@@ -16,7 +16,7 @@ class CreateWorkfilesTable extends Migration
         Schema::create('workfiles', function (Blueprint $table) {
             $table->id();
             $table->text('file');
-            $table->date('month');
+            $table->smallInteger('week');
             $table->foreignId('user_id')->constrained();
             $table->foreignId('part_id')->constrained();
             $table->timestamps();
