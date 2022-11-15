@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Packfile;
 use App\Models\Pdsfile;
+use App\Models\Video;
 use App\Models\Workfile;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class AnalysisController extends Controller
 {
@@ -15,30 +15,44 @@ class AnalysisController extends Controller
         return view('analysis.index');
     }
 
-    public function analysisData()
+    public function analysisData(Request $request)
     {
-        $start = date('W', strtotime("-5 week"));
-        $currentWeek = date('W');
-        $counter =  $start;
 
-        while ($counter <= $currentWeek) {
-            // $xaxis[] = date('W', strtotime($counter));
+        @$week = $request->week;
+        if (@$week) {
+            $start = $week;
+            $currentWeek = date('W');
+            $counter =  $start;
 
-            $xaxis[] = $counter;
-            $pdsConut[] = Pdsfile::where('week',  $counter)->count();
-            $workConut[] = Workfile::where('week',  $counter)->count();
-            $packConut[] = Packfile::where('week',  $counter)->count();
-            $counter = $counter + 1;
+            while ($counter <= $currentWeek) {
+                $xaxis[] =  "WK-" . $counter;
+                $pdsConut[] = Pdsfile::where('week',  '<=', $counter)->count();
+                $workConut[] = Workfile::where('week', '<=', $counter)->count();
+                $packConut[] = Packfile::where('week',  '<=', $counter)->count();
+                $videoConut[] = Video::where('week',  '<=', $counter)->count();
+                $counter = $counter + 1;
+            }
+        } else {
+            $start = date('44');
+            $currentWeek = date('W');
+            $counter =  $start;
 
-            // $counter = date('W', strtotime('+1 week', strtotime($counter)));
+            while ($counter <= $currentWeek) {
+                $xaxis[] = "WK-" . $counter;
+                $pdsConut[] = Pdsfile::where('week',  '<=', $counter)->count();
+                $workConut[] = Workfile::where('week', '<=', $counter)->count();
+                $packConut[] = Packfile::where('week',  '<=', $counter)->count();
+                $videoConut[] = Video::where('week',  '<=', $counter)->count();
+                $counter = $counter + 1;
+            }
         }
-
         return response()->json([
             'xaxis' => ['weeks' => $xaxis],
             'series' => [
                 'pds' => ['name' => 'PDS Files', 'data' => $pdsConut],
                 'work' => ['name' => 'Work Files', 'data' => $workConut],
                 'pack' => ['name' => 'Pack Files', 'data' => $packConut],
+                'video' => ['name' => 'Videos', 'data' => $videoConut],
             ]
         ]);
     }

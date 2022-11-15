@@ -102,7 +102,7 @@ Route::middleware('auth')->group(function () {
         function () {
 
             Route::get('analysis', 'index')->name('index');
-            Route::get('/get/analysis', 'analysisData')->name('get.analysis');
+            Route::post('get/analysis', 'analysisData')->name('get');
         }
     );
 });

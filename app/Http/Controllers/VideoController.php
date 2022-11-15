@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\FileAdded;
 use App\Models\Part;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,10 +40,14 @@ class VideoController extends Controller
             $path = 'videos/' . $modelName . '/';
             $filePath = uploadImage($path, $request->video);
         }
+
         $model = selectModel($modelName);
+        $week = date("W", strtotime(Carbon::now()));
+
         try {
             $model->file = $filePath;
             $model->title = $request->title;
+            $model->week =  $week;
             $model->user_id = Auth::user()->id;
             $model->part_id = $part->id;
             $model->save();

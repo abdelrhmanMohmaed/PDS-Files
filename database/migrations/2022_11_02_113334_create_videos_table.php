@@ -17,6 +17,7 @@ class CreateVideosTable extends Migration
             $table->id();
             $table->text('file');
             $table->string('title');
+            $table->smallInteger('week');
             $table->foreignId('user_id')->constrained();
             $table->foreignId('part_id')->constrained();
             $table->timestamps();

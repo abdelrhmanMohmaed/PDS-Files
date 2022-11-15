@@ -50,24 +50,52 @@
         }
     </style>
     <div class="container">
-        <div class="row">
-            <div class="mt-5">
-                <br><br><br><br><br>
+        <div class="row justify-content-center">
+            <div class="col-md-8 mt-5">
+                <div class="card">
+                    <div class="card-body">
+                        <figure class="highcharts-figure">
+                            <div id="container"></div>
+                        </figure>
+                    </div>
+                </div>
             </div>
-
-            <div class="col-md-12 ">
-                <figure class="highcharts-figure">
-                    <div id="container"></div>
-                </figure>
+        </div>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div id="fire" class="col-md-4 mt-2 ">
+                <div class="card ms-auto">
+                    <div class="card-body">
+                        <form id="form" style="user-select: auto;">
+                            <div class="row" style="user-select: auto;">
+                                <div class="col-md-8" style="user-select: auto;">
+                                    <div class="form-group" style="user-select: auto;">
+                                        <label for="" class="font-weight-bold" style="user-select: auto;">
+                                            <strong>Type starting week</strong></label>
+                                        <input type="number" id="week" class="form-control" name="from"
+                                            style="user-select: auto;" placeholder="EXP: 35">
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="user-select: auto;">
+                                    <div class="form-group mt-4  " style="user-select: auto;">
+                                        <button class="btn btn-primary" style="user-select: auto;">Get
+                                            Data</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 @section('script')
     <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/pareto.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
     <script>
         $.ajaxSetup({
             headers: {
@@ -75,9 +103,30 @@
             }
         });
         $(document).ready(function() {
+            $("#form").submit(function(event) {
+                $("#fire").fadeOut(120);
+                var formData = {
+                    week: $("#week").val(),
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: '{{ url('') }}/' + 'get/analysis',
+                    data: formData,
+                    dataType: "json",
+                    encode: true,
+                    success: function(data) {
+                        getData(data)
+                    }
+                });
+                $("#week").val("");
+                $("#fire").fadeIn(120);
+                event.preventDefault();
+            });
+
             $.ajax({
                 url: '{{ url('') }}/' + 'get/analysis',
-                type: 'get',
+                type: 'post',
                 dataType: 'json',
                 success: function(data) {
                     getData(data)
