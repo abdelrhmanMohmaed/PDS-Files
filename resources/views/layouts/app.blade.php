@@ -56,9 +56,6 @@
                             <!-- Left Side Of Navbar -->
                             <div class="navbar-nav ms-auto">
                                 @auth
-                                    {{-- <div class="m-2">
-                                        <x-machine></x-machine>
-                                    </div> --}}
                                     <div class="mt-2">
                                         <x-navbar></x-navbar>
                                     </div>
@@ -92,11 +89,9 @@
                                                     Home
                                                 </a>
                                                 @if (in_array(Auth::user()->role_id, [1, 2]))
-                                                    @if (in_array(Auth::user()->role_id, [1]))
-                                                        <a class="dropdown-item" href="{{ route('analysis.index') }}">
-                                                            Analysis
-                                                        </a>
-                                                    @endif
+                                                    <a class="dropdown-item" href="{{ route('analysis.index') }}">
+                                                        Analysis
+                                                    </a>
                                                     <a class="dropdown-item" href="{{ route('category.new') }}">
                                                         Categories
                                                     </a>
@@ -140,6 +135,9 @@
                                         </a>
                                         <a class="dropdown-item" href="#">
                                             PACK: <strong> {{ $packCount }}</strong>
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            VIDEOS: <strong> {{ $videoCount }}</strong>
                                         </a>
                                     </div>
                                 </li>

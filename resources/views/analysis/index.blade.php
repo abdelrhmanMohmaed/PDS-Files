@@ -72,7 +72,7 @@
                                     <div class="form-group" style="user-select: auto;">
                                         <label for="" class="font-weight-bold" style="user-select: auto;">
                                             <strong>Type starting week</strong></label>
-                                        <input type="number" id="week" class="form-control" name="from"
+                                        <input type="number" id="week" min="1" class="form-control" name="from"
                                             style="user-select: auto;" placeholder="EXP: 35">
                                     </div>
                                 </div>
@@ -142,7 +142,7 @@
                     type: 'column'
                 },
                 title: {
-                    text: 'Five Weeks Analysis'
+                    text: 'Weekly Analysis'
                 },
                 // subtitle: {
                 //     text: 'Source: ' +

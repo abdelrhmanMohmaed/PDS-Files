@@ -50,8 +50,8 @@ class AnalysisController extends Controller
             'xaxis' => ['weeks' => $xaxis],
             'series' => [
                 'pds' => ['name' => 'PDS Files', 'data' => $pdsConut],
-                'work' => ['name' => 'Work Files', 'data' => $workConut],
-                'pack' => ['name' => 'Pack Files', 'data' => $packConut],
+                'work' => ['name' => 'Work Instruction', 'data' => $workConut],
+                'pack' => ['name' => 'PACK Instruction', 'data' => $packConut],
                 'video' => ['name' => 'Videos', 'data' => $videoConut],
             ]
         ]);
