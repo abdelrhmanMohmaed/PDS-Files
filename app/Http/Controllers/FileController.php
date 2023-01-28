@@ -18,20 +18,12 @@ class FileController extends Controller
     public function showfile(Part $part, $modelName)
     {
         $model = selectModel($modelName);
+        $machines = Machine::get();
 
-        if (in_array(Auth::user()->role_id, [1, 2])) {
-
-            $machines = Machine::get();
-
-            $files = $model->where('part_id', $part->id)->orderBy('id', 'DESC')->paginate(10);
-            return view('web.files.show_file', compact(['files', 'modelName', 'machines']));
-        } else {
-            $files = $model->where('part_id', $part->id)
-                ->with(['part'])->latest('id')->first();
-
-            return view('web.files.show_file', compact(['files', 'modelName']));
-        }
+        $files = $model->where('part_id', $part->id)->orderBy('id', 'DESC')->paginate(10);
+        return view('web.files.show_file', compact(['files', 'modelName', 'machines']));
     }
+
 
     public function store(Part $part, $modelName, FileRequest $request)
     {
@@ -48,7 +40,15 @@ class FileController extends Controller
             $model->file = $filePath;
             $model->user_id = Auth::user()->id;
             $model->part_id = $part->id;
-            $model->machine_id = $request->machine_id;
+
+            // check a machine_id added or no 
+            if ($request->machine_id) {
+                $request->validate([
+                    'machine_id'=>'required|exists:machines,id', 
+                ]);
+                $model->machine_id = $request->machine_id;
+            }
+
             $model->week =  $week;
             $model->save();
 
@@ -57,12 +57,12 @@ class FileController extends Controller
 
             return redirect()->route("get.show", [$part->id]);
         } catch (Exception $e) {
-            // dd($e);
             $request->session()->flash('wrong', 'Something is wrong please try again!!');
             return redirect()->route("get.show", [$part->id]);
         }
         return redirect()->route("get.show", [$part->id]);
     }
+
 
     public function update(Request $request)
     {
@@ -84,6 +84,7 @@ class FileController extends Controller
     {
         $model = selectModel($modelName);
         $file = $model->where('id', $id)->first();
+        if(!$file) return abort(404);
 
         $path = "files/" . $modelName . '/' . $file->file;
 
@@ -101,7 +102,7 @@ class FileController extends Controller
     {
         $model = selectModel($request->name);
         $file = $model->where('id', $request->file_id)->first();
-
+        if(!$file) return abort(404);
 
         $path = "files/" . $request->name . '/' . $file->file;
 

@@ -101,8 +101,10 @@ Route::middleware('auth')->group(function () {
     Route::controller(AnalysisController::class)->name('analysis.')->group(
         function () {
 
-            Route::get('analysis', 'index')->name('index');
-            Route::post('get/analysis', 'analysisData')->name('get');
+            Route::get('analysis', 'productionindex')->name('index');
+            Route::get('analysis/quality', 'Qualityindex')->name('index.quality');
+            
+            Route::post('get/analysis/{modal}', 'analysisData')->name('get');
         }
     );
 });

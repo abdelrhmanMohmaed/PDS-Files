@@ -5,11 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
-                    @if (in_array(Auth::user()->role_id, [1, 2]))
-                        @include('web.files.inc.show_video')
-                    @else
-                        @include('web.files.inc.show_video_user')
-                    @endif
+                    @include('web.files.inc.show_video')
                 </div>
             </div>
         </div>

@@ -54,7 +54,7 @@
                             </div>
                         </div>
 
-                        <div class="row" id="store">
+                        <div class="row" id="store_production">
 
                             <div class="col-md-3">
                                 <div class="card">
@@ -63,7 +63,7 @@
                                         <p class="card-text"></p>
 
                                         {{-- start include store pds --}}
-                                        @include('web.files.inc.store_pds')
+                                        @include('web.files.inc.production.store.store_pds')
                                         {{-- end include store pds --}}
                                     </div>
                                 </div>
@@ -77,7 +77,7 @@
                                         </p>
 
                                         {{-- start include store work --}}
-                                        @include('web.files.inc.store_work')
+                                        @include('web.files.inc.production.store.store_work')
                                         {{-- end include store work --}}
                                     </div>
                                 </div>
@@ -91,7 +91,7 @@
                                         </p>
 
                                         {{-- start include store pack --}}
-                                        @include('web.files.inc.store_pack')
+                                        @include('web.files.inc.production.store.store_pack')
                                         {{-- end include store pack --}}
 
                                     </div>
@@ -105,12 +105,84 @@
                                         <p class="card-text">
                                         </p>
                                         {{-- start include store video --}}
-                                        @include('web.files.inc.store_video')
+                                        @include('web.files.inc.production.store.store_video')
                                         {{-- end include store video --}}
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-12 w-100 mt-5" id="store_quality">
+                <div class="card">
+                    <div class="card-header bg-success">
+                        <strong>
+                            Quality Files
+                        </strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+
+                            <div class="col-md-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><strong>َQCP:</strong> </h5>
+                                        <p class="card-text"></p>
+
+                                        {{-- start include store store_qcp --}}
+                                        @include('web.files.inc.quality.store.store_qcp')
+                                        {{-- end include store store_qcp --}}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><strong>Care Point:</strong> </h5>
+                                        <p class="card-text">
+                                        </p>
+
+                                        {{-- start include store Care Point --}}
+                                        @include('web.files.inc.quality.store.store_care_point')
+                                        {{-- end include store Care Point --}}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><strong>CC Measurement Method:</strong> </h5>
+                                        <p class="card-text">
+                                        </p>
+
+                                        {{-- start include store cc --}}
+                                        @include('web.files.inc.quality.store.store_cc')
+                                        {{-- end include store cc --}}
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><strong>Gauges usage method:</strong> </h5>
+                                        <p class="card-text">
+                                        </p>
+                                        {{-- start include store store_gauges --}}
+                                        @include('web.files.inc.quality.store.store_gauges')
+                                        {{-- end include store store_gauges --}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

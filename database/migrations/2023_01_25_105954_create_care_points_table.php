@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePdsfilesTable extends Migration
+class CreateCarePointsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreatePdsfilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('pdsfiles', function (Blueprint $table) {
+        Schema::create('care_points', function (Blueprint $table) {
             $table->id();
             $table->text('file');
             $table->smallInteger('week');
-            $table->foreignId('machine_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('part_id')->constrained();
             $table->timestamps();
@@ -31,6 +30,6 @@ class CreatePdsfilesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pdsfiles');
+        Schema::dropIfExists('care_points');
     }
 }

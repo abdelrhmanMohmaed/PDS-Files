@@ -28,17 +28,18 @@ class NewUser
     public function handle($event)
     {
         $actionBy = Auth::user();
-        // $principalEmail = $event->report->principal->email;
 
         $view = 'emails.new-user';
         $data = array('event' => $event,'actionBy'=>$actionBy);
-    //   dd(  $data);
+
         Mail::send($view, $data, function ($message) use ($event) {
 
-
-            $message->to([$event->user->email]);
-            // $message->cc($event->files->user->email);
-            $message->bcc(['Abdelrahman.Mohamed@samaya-electronics.com']);
+            if (Auth::user()->role_id != 1) {
+                $message->to([$event->user->email]);
+                $message->bcc(['Abdelrahman.Mohamed@samaya-electronics.com']);
+            }else{
+                $message->bcc(['Abdelrahman.Mohamed@samaya-electronics.com']);
+            }
             $message->subject('Injection Files System Report Notification');
             $message->from('EPD-Notifications@samaya-electronics.com', 'Engineering Program Development');
         });

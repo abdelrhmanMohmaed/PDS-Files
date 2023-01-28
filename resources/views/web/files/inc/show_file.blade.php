@@ -27,8 +27,8 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>item Name</th>
-                    <th>Machine </th>
+                    <th>File Name</th>
+                    <th>Machine</th>
                     <th>Data Time</th>
                     <th>Created By</th>
                     <th class="">Actions</th>
@@ -40,8 +40,9 @@
                     <td>
                         {{ substr($item->file, 11) }}
                     </td>
+
                     <td>
-                        {{ @$item->machine->number }}
+                        {{ @$item->machine->number ?? 'N/A' }}
                     </td>
                     <td>
                         {{ \Carbon\Carbon::parse($item->created_at)->format('d M, Y / H:i:s') }}
@@ -54,17 +55,21 @@
                             class="btn btn-sm btn-outline-info">
                             Download
                         </a>
+                        @if (in_array(Auth::user()->role_id, [1, 2]))
+                            @if (@$item->machine->number)
+                                <button type="button" class="btn btn-sm btn-outline-dark" data-bs-toggle="modal"
+                                    data-bs-target="#EditModal" data-id={{ $item->id }}
+                                    data-name={{ $modelName }}>
+                                    Edit machine number
+                                </button>
+                            @endif
 
-                        <button type="button" class="btn btn-sm btn-outline-dark" data-bs-toggle="modal"
-                            data-bs-target="#EditModal" data-id={{ $item->id }} data-name={{ $modelName }}>
-                            Edit machine number
-                        </button>
-
-                        <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
-                            data-bs-target="#DeleteModal" data-file_id={{ $item->id }}
-                            data-name={{ $modelName }}>
-                            Delete
-                        </button>
+                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                                data-bs-target="#DeleteModal" data-file_id={{ $item->id }}
+                                data-name={{ $modelName }}>
+                                Delete
+                            </button>
+                        @endif
                     </td>
                 </tbody>
             @endforeach
@@ -124,29 +129,27 @@
 
         {{-- delete modal  --}}
         <div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="deleteModelLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-header text-white " style="background-color: rgb(255, 0, 0,0.7);">
-                        <h5 class="modal-title " id="exampleModalLabel">Delete</h5>
-                        <button type="button" class="btn-close text-white" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+                    <div class="modal-header text-white bg-danger">
+                        <h5 class="modal-title" id="deleteSubTaskLabel">
+                            <i class="fa-solid fa-trash-can"></i>
+                            Destroy File
+                        </h5>
                     </div>
-
 
                     <form action="{{ route('file.delete', 'test') }}" method="post">
                         @csrf
-                        <div class="modal-body w-100 text-center">
+                        <div class="modal-body">
                             <input type="hidden" name="file_id" id="file_id">
                             <input type="hidden" name="name" id="name">
-                            <h4 class="w-100 text-center text-danger">
-                                Are you sure want to delete this file ?
-                            </h4>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-sm text-white"
-                                style="background-color: rgb(255, 0, 0,0.7);">
-                                Yes, Delete
-                            </button>
+                            &#x2022; Are you sure you want to delete this File ? <br>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-sm text-white"
+                                    style="background-color: rgb(255, 0, 0,0.7);">
+                                    Yes, Delete
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
