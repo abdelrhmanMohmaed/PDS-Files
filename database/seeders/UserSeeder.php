@@ -26,7 +26,7 @@ class UserSeeder extends Seeder
             // Ashraf Mostafa
             'name' => 'Abdelrahman Mohamed',
             // 'seel_code' => '4173',
-            'email' => 'Abdelrahman.Mohamed@samaya-electronics.com',
+            'email' => 'Abdelrahman@Mohamed.com',
             'password' => Hash::make('123456789'),
             'role_id' => 1,
         ]); 

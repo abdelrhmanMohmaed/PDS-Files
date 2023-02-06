@@ -103,7 +103,7 @@
             }
         });
         $(document).ready(function() {
-            var modal = 'production';
+            var modal = 'quality';
             $("#form").submit(function(event) {
                 $("#fire").fadeOut(120);
                 var formData = {
@@ -130,6 +130,7 @@
                 type: 'post',
                 dataType: 'json',
                 success: function(data) {
+                    console.log(data);
                     getData(data)
                 }
             });

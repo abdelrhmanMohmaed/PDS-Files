@@ -46,11 +46,6 @@
                         {{ $item->user->name }}
                     </td>
                     <td>
-                        <button type="button" class="btn btn-sm btn-outline-dark" data-bs-toggle="modal"
-                            data-bs-target="#EditModal" class="btn btn-danger" data-file_id={{ $item->id }}
-                            data-name={{ $modelName }}>
-                            Edit Title
-                        </button>
                         <a href="{{ route('video.watch', ['id' => $item->id, 'name' => $modelName]) }}"
                             class="btn btn-sm btn-outline-warning">
                             Watch
@@ -59,11 +54,18 @@
                             class="btn btn-sm btn-outline-info">
                             Download
                         </a>
-                        <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
-                            data-bs-target="#DeleteModal" class="btn btn-danger" data-file_id={{ $item->id }}
-                            data-name={{ $modelName }}>
-                            Delete
-                        </button>
+                        @if (in_array(Auth::user()->role_id, [1, 2]))
+                            <button type="button" class="btn btn-sm btn-outline-dark" data-bs-toggle="modal"
+                                data-bs-target="#EditModal" class="btn btn-danger" data-file_id={{ $item->id }}
+                                data-name={{ $modelName }}>
+                                Edit Title
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                                data-bs-target="#DeleteModal" class="btn btn-danger" data-file_id={{ $item->id }}
+                                data-name={{ $modelName }}>
+                                Delete
+                            </button>
+                        @endif
                     </td>
                 </tbody>
             @endforeach
@@ -116,31 +118,32 @@
 
         {{-- delete modal  --}}
         <div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="deleteModelLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-header text-white " style="background-color: rgb(255, 0, 0,0.7);">
-                        <h5 class="modal-title " id="exampleModalLabel">Delete</h5>
-                        <button type="button" class="btn-close btn-white" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+                    <div class="modal-header text-white bg-danger">
+                        <h5 class="modal-title" id="deleteSubTaskLabel">
+                            <i class="fa-solid fa-trash-can"></i>
+                            #Destroy Video
+                        </h5>
                     </div>
+
                     <form action="{{ route('video.delete', 'test') }}" method="post">
                         @csrf
-                        <div class="modal-body w-100 text-center">
+                        <div class="modal-body">
                             <input type="hidden" name="file_id" id="file_id">
                             <input type="hidden" name="name" id="name">
-                            <h4 class="w-100 text-center text-danger">
-                                Are you sure want to delete this video ?
-                            </h4>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-sm text-white"
-                                style="background-color: rgb(255, 0, 0,0.7);">
-                                Yes, Delete
-                            </button>
+                            &#x2022; Are you sure you want to delete this Video ? <br>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-sm text-white"
+                                    style="background-color: rgb(255, 0, 0,0.7);">
+                                    Yes, Delete
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+
     </div>
 </div>
