@@ -15,12 +15,12 @@
 
     <div class="col-md-2">
         <div class="mt-4">
-            <button type="button" class="btn btn-sm btn-outline-danger float-end mx-1" id="deleteCompany"
+            <button type="button" disabled class="btn btn-sm btn-outline-danger float-end mx-1" id="deleteCompany"
                 data-bs-toggle="modal" data-bs-target="#DeleteModal_company">
                 Delete
             </button>
 
-            <button type="button" class="btn btn-sm btn-outline-dark float-end mx-1" id="editCompany"
+            <button type="button" disabled class="btn btn-sm btn-outline-dark float-end mx-1" id="editCompany"
                 data-bs-toggle="modal" data-bs-target="#EditModal_company">
                 Edit
             </button>
@@ -89,3 +89,4 @@
         </div>
     </div>
 </div>
+ 

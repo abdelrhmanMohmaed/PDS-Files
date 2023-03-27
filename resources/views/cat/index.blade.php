@@ -61,7 +61,8 @@
             if ($(this).val() != '') {
                 var companyId = $(this).val();
                 var _token = $('input[name="_token"]').val();
-            }
+            } 
+
             modalLoader('POST', 'get/model', 'mod', 'empty', 'empty', {
                 companyId,
                 _token

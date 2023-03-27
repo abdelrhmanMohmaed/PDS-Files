@@ -13,7 +13,9 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Injection'),
+
+    'ldap_Server' => env('LDAP_SERVER'),
 
     /*
     |--------------------------------------------------------------------------

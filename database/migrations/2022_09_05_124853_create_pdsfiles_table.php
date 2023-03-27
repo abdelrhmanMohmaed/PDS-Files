@@ -17,6 +17,7 @@ class CreatePdsfilesTable extends Migration
             $table->id();
             $table->text('file');
             $table->smallInteger('week');
+            $table->foreignId('machine_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('part_id')->constrained();
             $table->timestamps();

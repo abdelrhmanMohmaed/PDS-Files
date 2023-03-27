@@ -23,10 +23,52 @@
 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-    <link rel=" stylesheet" href="{{ asset('asset/css/fontawesome.all.css') }}" />
+    <link rel=" stylesheet" href="{{ asset('asset/css/all.min.css') }}" />
 
     <link rel="stylesheet" href="{{ asset('asset/css/home.css') }}">
     @yield('style')
+
+    {{-- style second drop down --}}
+    <style>
+        .dropdown-menoo {
+            display: none !important;
+            height: 90px !important;
+            color: #FFF !important;
+            position: absolute;
+            top: 30px;
+            left: 160px;
+        }
+
+        .secend-meno:hover+.dropdown-menoo {
+            background-color: white !important;
+            display: block !important;
+        }
+
+        .dropdown-menoo:hover {
+            background-color: white !important;
+            display: block !important;
+        }
+
+        /*  */
+        .dropdown-menoo-create {
+            display: none !important;
+            height: 90px !important;
+            color: #FFF !important;
+            position: absolute;
+            top: 30px;
+            left: 160px;
+        }
+
+        .secend-meno-create:hover+.dropdown-menoo-create {
+            background-color: white !important;
+            display: block !important;
+        }
+
+        .dropdown-menoo-create:hover {
+            background-color: white !important;
+            display: block !important;
+        }
+    </style>
 
 </head>
 
@@ -41,7 +83,7 @@
                  @endif --}}
                 <nav class="navbar navbar-expand-md navbar-dark  shadow-sm" style="background-color: #343a40">
                     <div class="container">
-                        <a class="navbar-brand" href="{{ url('/') }}">
+                        <a class="navbar-brand" href="{{ route('home') }}">
                             <img src="{{ asset('asset/img/samayalogo.png') }}"width="70" height="30"
                                 class="d-inline-block align-top" alt="">
                             Injection Files
@@ -77,6 +119,11 @@
                                             </li>
                                         @endif
                                     @else
+                                        <div class="">
+                                            {{-- <button class="meno-btn">menu</button> --}}
+
+                                        </div>
+
                                         <li class="nav-item dropdown">
                                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#"
                                                 role="button" data-bs-toggle="dropdown" aria-haspopup="true"
@@ -84,17 +131,54 @@
                                                 {{ Auth::user()->name }}
                                             </a>
 
-                                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                            <div class="dropdown-menu dropdown-menu-end " aria-labelledby="navbarDropdown">
                                                 <a class="dropdown-item" href="{{ route('home') }}">
                                                     Home
                                                 </a>
                                                 @if (in_array(Auth::user()->role_id, [1, 2]))
-                                                    <a class="dropdown-item" href="{{ route('analysis.index') }}">
+                                                    <a class="dropdown-item secend-meno" href="#">
                                                         Analysis
+                                                        <i class="float-end fa-solid fa-arrow-right text-black-50"></i>
+                                                        <ul class="dropdown-menoo border w-100 rounded">
+                                                            <li>
+                                                                <a class="dropdown-item"
+                                                                    href="{{ route('analysis.index') }}">Production</a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="dropdown-item"
+                                                                    href="{{ route('analysis.index.quality') }}">Quality</a>
+                                                            </li>
+                                                        </ul>
                                                     </a>
-                                                    <a class="dropdown-item" href="{{ route('category.new') }}">
-                                                        Categories
-                                                    </a>
+
+                                                    @if (Auth::user()->id == 2)
+                                                        <a class="dropdown-item secend-meno-create" href="#">
+                                                            Create
+                                                            <i class="float-end fa-solid fa-arrow-right text-black-50"></i>
+                                                            <ul class="dropdown-menoo-create border w-100 rounded">
+                                                                <li>
+                                                                    <a class="dropdown-item"
+                                                                        href="{{ route('category.new') }}">
+                                                                        Categories
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item"
+                                                                        href="{{ route('training.index') }}">Training</a>
+                                                                </li>
+                                                            </ul>
+                                                        </a>
+                                                        <a class="dropdown-item" href="{{ route('training.show') }}">
+                                                            Training Tab
+                                                        </a>
+                                                    @else
+                                                        <a class="dropdown-item" href="{{ route('category.new') }}">
+                                                            Categories
+                                                        </a>
+                                                    @endif
+
+
+
                                                     <a class="dropdown-item" href="{{ route('user.show') }}">
                                                         Edit Profile
                                                     </a>
@@ -139,6 +223,18 @@
                                         <a class="dropdown-item" href="#">
                                             VIDEOS: <strong> {{ $videoCount }}</strong>
                                         </a>
+                                        {{-- <a class="dropdown-item" href="#">
+                                            QCP: <strong> {{ $qcpCount }}</strong>
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            Measurement: <strong> {{ $measurementCount }}</strong>
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            CarePoint: <strong> {{ $carePointCount }}</strong>
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            Gauges: <strong> {{ $gaugesCount }}</strong>
+                                        </a> --}}
                                     </div>
                                 </li>
                             </ul>
@@ -151,6 +247,7 @@
         </div>
     </section>
     <script src="{{ asset('asset/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('asset/js/all.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script>
@@ -160,7 +257,9 @@
 
         $('body').on('click', '#submit', function() {
             $(this).css('cursor', 'not-allowed');
-            $('#store').fadeOut(50);
+            $('#store_production').fadeOut(50);
+            $('#store_quality').fadeOut(50);
+
             $('#loader').css('display', 'block');
             $('#loaderGif').append(`
             <img src="{{ url('asset/img/load.gif') }}">
@@ -191,6 +290,28 @@
                 }
             });
         }
+
+        //start use to show and hide models in training and category
+        function Moodels(btn, modelEditId, modelDeleteId) {
+            if ($('#' + btn).val() != '') {
+
+                let _id = $('#' + btn).val();
+
+                $('#' + modelEditId).val(_id);
+                $('#' + modelDeleteId).val(_id);
+
+            }
+        }
+        
+        function removeDisabled(change_for, first_id, second_id) {
+            $('body').on('change', '#' + change_for, function() {
+
+                $('#' + first_id).removeAttr("disabled");
+                $('#' + second_id).removeAttr("disabled");
+            });
+        }
+        //end use to show and hide models in training and category
+
     </script>
 
     @yield('script')

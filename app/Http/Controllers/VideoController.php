@@ -16,17 +16,9 @@ class VideoController extends Controller
     public function show(Part $part, $modelName)
     {
         $model = selectModel($modelName);
-        if (in_array(Auth::user()->role_id, [1, 2])) {
+        $files = $model->where('part_id', $part->id)->orderBy('id', 'DESC')->paginate(10);
 
-            $files = $model->where('part_id', $part->id)->orderBy('id', 'DESC')->paginate(10);
-
-            return view('web.files.show_video', compact(['files', 'modelName']));
-        } else {
-            $files = $model->where('part_id', $part->id)
-                ->with(['part'])->latest('id')->first();
-
-            return view('web.files.show_video', compact(['files', 'modelName']));
-        }
+        return view('web.files.show_video', compact(['files', 'modelName']));
     }
 
     public function store(Part $part, $modelName, Request $request)
@@ -57,7 +49,7 @@ class VideoController extends Controller
 
             return back();
         } catch (Exception $e) {
-            return $e;
+            // return $e;
             $request->session()->flash('wrong', 'Something is wrong please try again!!');
             return back();
         }
@@ -68,6 +60,7 @@ class VideoController extends Controller
     {
         $model = selectModel($modelName);
         $file = $model->where('id', $id)->first();
+        if(!$file) return abort(404);
 
         $path = "videos/" . $modelName . '/' . $file->file;
 
@@ -97,7 +90,7 @@ class VideoController extends Controller
     {
         $model = selectModel($request->name);
         $file = $model->where('id', $request->file_id)->first();
-
+        if(!$file) return abort(404);
 
         $path = "videos/" . $request->name . '/' . $file->file;
 
@@ -120,7 +113,9 @@ class VideoController extends Controller
     {
         $model = selectModel($modelName);
         $file = $model->where('id', $id)->first();
+        if(!$file) return abort(404);
 
-        return view('web.files.watch', compact('file'));
+
+        return view('web.files.watch', compact(['file','modelName']));
     }
 }

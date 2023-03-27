@@ -15,12 +15,12 @@
 
     <div class="col-md-2">
         <div class="mt-4">
-            <button type="button" class="btn btn-sm btn-outline-danger float-end mx-1" id="deleteModel"
+            <button type="button" disabled class="btn btn-sm btn-outline-danger float-end mx-1" id="deleteModel"
                 data-bs-toggle="modal" data-bs-target="#DeleteModal_model">
                 Delete
             </button>
 
-            <button type="button" class="btn btn-sm btn-outline-dark float-end mx-1" id="editModel"
+            <button type="button" disabled class="btn btn-sm btn-outline-dark float-end mx-1" id="editModel"
                 data-bs-toggle="modal" data-bs-target="#EditModal_model">
                 Edit
             </button>

@@ -72,8 +72,8 @@
                                     <div class="form-group" style="user-select: auto;">
                                         <label for="" class="font-weight-bold" style="user-select: auto;">
                                             <strong>Type starting week</strong></label>
-                                        <input type="number" id="week" min="1" class="form-control" name="from"
-                                            style="user-select: auto;" placeholder="EXP: 35">
+                                        <input type="number" id="week" min="1" class="form-control"
+                                            name="from" style="user-select: auto;" placeholder="EXP: 35">
                                     </div>
                                 </div>
                                 <div class="col-md-4" style="user-select: auto;">
@@ -103,6 +103,7 @@
             }
         });
         $(document).ready(function() {
+            var modal = 'production';
             $("#form").submit(function(event) {
                 $("#fire").fadeOut(120);
                 var formData = {
@@ -111,7 +112,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: '{{ url('') }}/' + 'get/analysis',
+                    url: '{{ url('') }}/' + 'get/analysis/' + modal,
                     data: formData,
                     dataType: "json",
                     encode: true,
@@ -125,7 +126,7 @@
             });
 
             $.ajax({
-                url: '{{ url('') }}/' + 'get/analysis',
+                url: '{{ url('') }}/' + 'get/analysis/' + modal,
                 type: 'post',
                 dataType: 'json',
                 success: function(data) {
@@ -161,6 +162,9 @@
                         useHTML: true,
                         text: 'Count of files per week'
                     }
+                },
+                credits: {
+                    enabled: false
                 },
                 // tooltip: {
                 //     headerFormat: '<span style="font-size:10px">{point.key}</span><table>',

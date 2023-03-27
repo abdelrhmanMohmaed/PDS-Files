@@ -29,7 +29,7 @@ class ListenerFile
     {
         
         $filePath = "";
-        if ($event->modelName!='Video') { 
+        if (!in_array($event->modelName,['Video','Measurement','Gauges','TrainingVideo'])) { 
             @$filePath = storage_path('app/files/' . $event->modelName . '/' . $event->files['file']);
         }
 
@@ -45,10 +45,14 @@ class ListenerFile
                 ); 
             }
 
-            $message->to([$event->files->user->email]);
-            $message->cc(['Ashraf.Mostafa@samaya-electronics.com','Abdelrahman.Mohamed@samaya-electronics.com']);
-            // $message->cc($event->files->user->email);
-            $message->bcc(['Anthony.Farah@samaya-electronics.com']);
+            if (Auth::user()->role_id != 1) {
+                $message->to([$event->files->user->email]);
+                $message->cc(['Ashraf.Mostafa@samaya-electronics.com','Abdelrahman.Mohamed@samaya-electronics.com']);
+                // $message->cc($event->files->user->email);
+                $message->bcc(['Anthony.Farah@samaya-electronics.com']);
+            }else{
+                $message->bcc(['Abdelrahman.Mohamed@samaya-electronics.com']);
+            }
             $message->subject('Injection Files System Report Notification');
             $message->from('EPD-Notifications@samaya-electronics.com', 'Engineering Program Development');
         });

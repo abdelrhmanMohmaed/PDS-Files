@@ -4,6 +4,7 @@ use App\Http\Controllers\AnalysisController;
 use App\Http\Controllers\CatController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VideoController;
 use App\Models\User;
@@ -78,6 +79,22 @@ Route::middleware('auth')->group(function () {
         }
     );
 
+
+    Route::controller(TrainingController::class)->prefix('training')->name('training.')->group(
+        function () {
+            Route::get('index', 'index')->name('index');
+            Route::get('show', 'show')->name('show');
+            Route::post('update', 'update')->name('update');
+            Route::post('training/delete', 'delete_training')->name('delete.training');
+
+
+            Route::get('show/{trainingId}', 'view');
+            Route::post('store', 'store')->name('store');
+            Route::post('store/{name}', 'store_training_video')->name('training_video.store');
+        }
+    );
+
+
     Route::middleware('CheckRole')->prefix('category')->controller(CatController::class)->name('category.')->group(
         function () {
 
@@ -101,8 +118,10 @@ Route::middleware('auth')->group(function () {
     Route::controller(AnalysisController::class)->name('analysis.')->group(
         function () {
 
-            Route::get('analysis', 'index')->name('index');
-            Route::post('get/analysis', 'analysisData')->name('get');
+            Route::get('analysis', 'productionindex')->name('index');
+            Route::get('analysis/quality', 'Qualityindex')->name('index.quality');
+
+            Route::post('get/analysis/{modal}', 'analysisData')->name('get');
         }
     );
 });

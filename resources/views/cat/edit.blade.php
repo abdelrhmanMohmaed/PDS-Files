@@ -54,13 +54,13 @@
 
                             <div class="col-md-2">
                                 <div class="mt-4">
-                                    <button type="button" class="btn btn-sm btn-outline-danger float-end mx-1"
+                                    <button type="button" disabled class="btn btn-sm btn-outline-danger float-end mx-1"
                                         id="deletePart" data-bs-toggle="modal" data-bs-target="#DeleteModal_part">
                                         Delete
                                     </button>
 
-                                    <button type="button" class="btn btn-sm btn-outline-dark float-end mx-1" id="editPart"
-                                        data-bs-toggle="modal" data-bs-target="#EditModal_part">
+                                    <button type="button" disabled class="btn btn-sm btn-outline-dark float-end mx-1"
+                                        id="editPart" data-bs-toggle="modal" data-bs-target="#EditModal_part">
                                         Edit
                                     </button>
 
@@ -108,26 +108,26 @@
 
     {{-- delete modal  --}}
     <div class="modal fade" id="DeleteModal_part" tabindex="-1" aria-labelledby="deleteModelLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header text-white " style="background-color: rgb(255, 0, 0,0.7);">
-                    <h5 class="modal-title " id="exampleModalLabel">Delete</h5>
-                    <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header text-white bg-danger">
+                    <h5 class="modal-title" id="deleteSubTaskLabel">
+                        <i class="fa-solid fa-trash-can"></i>
+                        #Destroy
+                    </h5>
                 </div>
-
 
                 <form action="{{ route('category.delete.part', 'test') }}" method="post">
                     @csrf
-                    <div class="modal-body w-100 text-center">
+                    <div class="modal-body">
                         <input type="hidden" name="id" id="part_id_delete">
-                        <h4 class="w-100 text-center text-danger">
-                            Are you sure want to delete this Part ?
-                        </h4>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-sm text-white" style="background-color: rgb(255, 0, 0,0.7);">
-                            Yes, Delete
-                        </button>
+                        &#x2022; Are you sure you want to delete this ? <br>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-sm text-white"
+                                style="background-color: rgb(255, 0, 0,0.7);">
+                                Yes, Delete
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -135,20 +135,14 @@
     </div>
 
 
-
 @section('script')
     <script>
-        function Moodels(btn, modelEditId, modelDeleteId) {
-            if ($('#' + btn).val() != '') {
+        removeDisabled('part', 'deletePart', 'editPart');
+        removeDisabled('model', 'deleteModel', 'editModel');
+        removeDisabled('company', 'deleteCompany', 'editCompany');
+    </script>
 
-                let _id = $('#' + btn).val();
-
-                $('#' + modelEditId).val(_id);
-                $('#' + modelDeleteId).val(_id);
-
-            }
-        }
-
+    <script>
         $('body').on('change', '#part', function() {
 
             Moodels('part', 'part_id_edit', 'part_id_delete')

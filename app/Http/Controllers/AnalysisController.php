@@ -10,50 +10,29 @@ use Illuminate\Http\Request;
 
 class AnalysisController extends Controller
 {
-    public function index()
+    public function productionindex()
     {
         return view('analysis.index');
     }
 
-    public function analysisData(Request $request)
+    public function Qualityindex()
     {
+        return view('analysis.quality');
+    }
 
-        @$week = $request->week;
-        if (@$week) {
-            $start = $week;
-            $currentWeek = date('W');
-            $counter =  $start;
-
-            while ($counter <= $currentWeek) {
-                $xaxis[] =  "WK-" . $counter;
-                $pdsConut[] = Pdsfile::where('week',  '<=', $counter)->count();
-                $workConut[] = Workfile::where('week', '<=', $counter)->count();
-                $packConut[] = Packfile::where('week',  '<=', $counter)->count();
-                $videoConut[] = Video::where('week',  '<=', $counter)->count();
-                $counter = $counter + 1;
-            }
-        } else {
-            $start = date('44');
-            $currentWeek = date('W');
-            $counter =  $start;
-
-            while ($counter <= $currentWeek) {
-                $xaxis[] = "WK-" . $counter;
-                $pdsConut[] = Pdsfile::where('week',  '<=', $counter)->count();
-                $workConut[] = Workfile::where('week', '<=', $counter)->count();
-                $packConut[] = Packfile::where('week',  '<=', $counter)->count();
-                $videoConut[] = Video::where('week',  '<=', $counter)->count();
-                $counter = $counter + 1;
-            }
+    public function analysisData(Request $request, $modal)
+    {
+        if (!$modal)  return redirect()->route('home')->with('wrong', 'Something is wrong please try again!!');
+    
+        switch ($modal) {
+            case 'production':
+                return productionAnalysis($request);
+                break;
+            case 'quality':
+                return QualityAnalysis($request);
+                break;
+            default:
+                break;
         }
-        return response()->json([
-            'xaxis' => ['weeks' => $xaxis],
-            'series' => [
-                'pds' => ['name' => 'PDS Files', 'data' => $pdsConut],
-                'work' => ['name' => 'Work Instruction', 'data' => $workConut],
-                'pack' => ['name' => 'PACK Instruction', 'data' => $packConut],
-                'video' => ['name' => 'Videos', 'data' => $videoConut],
-            ]
-        ]);
     }
 }
