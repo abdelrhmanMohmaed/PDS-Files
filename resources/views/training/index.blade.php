@@ -7,7 +7,7 @@
                 <div class="card">
                     <div class="card-header bg-info">
                         <strong>
-                            Add New Training
+                            Add New Training Category
                             <button id="edit-btn" type="button" class="btn btn-sm btn-light float-end mx-1">
                                 Edit
                             </button>
@@ -84,10 +84,10 @@
                     class="w-100 modal-body" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
-                        <label class="col-form-label">Trainings:</label>
+                        <label class="col-form-label">Training:</label>
                         <select name="training" id="" class="form-control ">
 
-                            <option disabled selected>Open selector</option>
+                            <option disabled selected>Choose Category</option>
                             @foreach ($trainings as $item)
                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
                             @endforeach
