@@ -54,7 +54,6 @@ class UserController extends Controller
 
         if (isset($request->password) && $request->password != null)
             $data['password'] = Hash::make($request->password);
-
         // $data['email'] = $request->email;
         $data['role_id'] = $user->role_id;
         try {

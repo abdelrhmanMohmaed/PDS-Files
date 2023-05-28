@@ -117,10 +117,12 @@ Route::middleware('auth')->group(function () {
     Route::controller(AnalysisController::class)->name('analysis.')->group(
         function () {
 
-            Route::view('analysis', 'analysis.index')->name('index');
+            Route::view('analysis', 'productionanalysis.index')->name('index');
+            Route::get('analysis/quality', 'Qualityindex')->name('index.quality');
+            
             Route::view('analysis/quality', 'analysis.quality')->name('index.quality'); 
 
-            Route::post('get/analysis/{modal}', 'analysisData')->name('get');
+            Route::post('get/analysis/{modal}/{modal}', 'analysisData')->name('get');
         }
     );
 });

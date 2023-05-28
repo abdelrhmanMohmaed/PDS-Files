@@ -16,7 +16,10 @@ class VideoController extends Controller
     public function show(Part $part, $modelName)
     {
         $model = selectModel($modelName);
-        $files = $model->wherePartId($part->id)->latest('id')->paginate(10);
+        if (in_array(Auth::user()->role_id, [1, 2]))
+            $files = $model->wherePartId($part->id)->latest('id')->paginate(10);
+        else
+            $files = $model->where('part_id', $part->id)->with(['part'])->latest('id')->first();
 
         return view('web.files.show_video', compact(['files', 'modelName']));
     }
@@ -78,6 +81,7 @@ class VideoController extends Controller
         $request->validate([
             'title' => 'required|unique:videos,title',
         ]);
+
         $model = selectModel($request->name);
         $model->whereId($request->file_id)->update(['title' => $request->title]);
 
@@ -112,6 +116,6 @@ class VideoController extends Controller
         $model = selectModel($modelName);
         $file = $model->findOrFail($id);
 
-        return view('web.files.watch', compact(['file', 'modelName']));
+        return view('web.files.watch', compact('file'));
     }
 }
