@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCompanyRequest;
+use App\Http\Requests\StoreModelRequest;
+use App\Http\Requests\StorePartRequest;
 use App\Models\Company;
 use App\Models\ModelCar;
 use App\Models\Part;
 use Exception;
 use Illuminate\Http\Request;
-use RealRashid\SweetAlert\Facades\Alert;
 
 class CatController extends Controller
 {
@@ -18,13 +20,8 @@ class CatController extends Controller
         return view('cat.index', compact('companies', 'models'));
     }
 
-    public function store_company(Request $request)
+    public function store_company(StoreCompanyRequest $request)
     {
-        $request->validate([
-            'company' => 'required|string|min:3|max:50|unique:companies,name',
-        ], [
-            'company.unique' => 'Company already Exists'
-        ]);
         try {
             Company::create(['name' => $request->company]);
 
@@ -38,14 +35,8 @@ class CatController extends Controller
         return back();
     }
 
-    public function store_model(Request $request)
+    public function store_model(StoreModelRequest $request)
     {
-        $request->validate([
-            'companies' => 'required|string|exists:companies,id',
-            'model' => 'required|string|min:3|max:30|unique:models,name',
-        ], [
-            'model.unique' => 'Model already Exists',
-        ]);
         try {
             ModelCar::create([
                 'name' => $request->model,
@@ -54,20 +45,15 @@ class CatController extends Controller
 
             $request->session()->flash('success', 'New Model added successfully (' . $request->model . ')');
             return back();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $request->session()->flash('wrong', 'Something is wrong please try again!!');
             return back();
         }
         return back();
     }
 
-    public function store_part(Request $request)
+    public function store_part(StorePartRequest $request)
     {
-        $request->validate([
-            'com' => 'required|string|exists:companies,id',
-            'mod' => 'required|string|exists:models,id',
-            'part_num' => 'required|string|min:3|max:16',
-        ]);
         try {
             Part::create([
                 'model_id' => $request->mod,
@@ -76,7 +62,7 @@ class CatController extends Controller
 
             $request->session()->flash('success', 'New Part added successfully (' . $request->part_num . ')');
             return back();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $request->session()->flash('wrong', 'Something is wrong please try again!!');
             return back();
         }
@@ -94,9 +80,8 @@ class CatController extends Controller
 
     public function update_part(Request $request)
     {
-
         $part = Part::find($request->id);
-        if (!$part)  return redirect()->route('category.edit')->with('wrong', 'Something is wrong please try again!!');
+        if (!$part) return redirect()->route('category.edit')->with('wrong', 'Something is wrong please try again!!');
         $part->update($request->except(['_token']));
 
         return redirect()->route('category.edit')->with('success', 'Part updated successfully');
@@ -111,7 +96,7 @@ class CatController extends Controller
         ]);
 
         $model = ModelCar::find($request->id);
-        if (!$model)  return redirect()->route('category.edit')->with('wrong', 'Something is wrong please try again!!');
+        if (!$model) return redirect()->route('category.edit')->with('wrong', 'Something is wrong please try again!!');
         $model->update($request->except(['_token']));
 
         return redirect()->route('category.edit')->with('success', 'Model updated successfully');
@@ -126,7 +111,7 @@ class CatController extends Controller
         ]);
 
         $company = Company::find($request->id);
-        if (!$company)  return redirect()->route('category.edit')->with('wrong', 'Something is wrong please try again!!');
+        if (!$company) return redirect()->route('category.edit')->with('wrong', 'Something is wrong please try again!!');
         $company->update($request->except(['_token']));
 
         return redirect()->route('category.edit')->with('success', 'Company updated successfully');
@@ -135,8 +120,9 @@ class CatController extends Controller
     public function delete_part(Request $request)
     {
         $part = Part::find($request->id);
-        if (!$part)  return redirect()->route('category.edit')->with('wrong', 'Something is wrong please try again!!');
+        if (!$part) return redirect()->route('category.edit')->with('wrong', 'Something is wrong please try again!!');
         try {
+            // Note: her you should upgrade this fun
             $part->delete();
             return redirect()->route('category.edit')->with('success', 'Part deleted successfully');
         } catch (Exception $e) {
@@ -148,7 +134,7 @@ class CatController extends Controller
     public function delete_model(Request $request)
     {
         $model = ModelCar::find($request->id);
-        if (!$model)  return redirect()->route('category.edit')->with('wrong', 'Something is wrong please try again!!');
+        if (!$model) return redirect()->route('category.edit')->with('wrong', 'Something is wrong please try again!!');
         try {
             $model->delete();
             return redirect()->route('category.edit')->with('success', 'Model deleted successfully');
@@ -161,7 +147,7 @@ class CatController extends Controller
     public function delete_company(Request $request)
     {
         $company = Company::find($request->id);
-        if (!$company)  return redirect()->route('category.edit')->with('wrong', 'Something is wrong please try again!!');
+        if (!$company) return redirect()->route('category.edit')->with('wrong', 'Something is wrong please try again!!');
         try {
             $company->delete();
             return redirect()->route('category.edit')->with('success', 'Company deleted successfully');

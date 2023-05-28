@@ -21,8 +21,8 @@ class FileAdded
      */
     public function __construct(public $files, public $modelName)
     {
-        $this->file = $files;
-        $this->file = $modelName;
+        $this->files = $files;
+        $this->modelName = $modelName;
     }
     /**
      * Get the channels the event should broadcast on.

@@ -7,7 +7,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VideoController;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -118,8 +117,8 @@ Route::middleware('auth')->group(function () {
     Route::controller(AnalysisController::class)->name('analysis.')->group(
         function () {
 
-            Route::get('analysis', 'productionindex')->name('index');
-            Route::get('analysis/quality', 'Qualityindex')->name('index.quality');
+            Route::view('analysis', 'analysis.index')->name('index');
+            Route::view('analysis/quality', 'analysis.quality')->name('index.quality'); 
 
             Route::post('get/analysis/{modal}', 'analysisData')->name('get');
         }

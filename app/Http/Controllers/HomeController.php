@@ -25,18 +25,22 @@ class HomeController extends Controller
     public function getModels(Request $request)
     {
         if ($request->ajax()) {
-            $models = ModelCar::where('company_id', $request->companyId)->get();
+            $models = ModelCar::whereCompanyId($request->companyId)->get();
             $output = getData($models);
+            return $output;
+        } else {
+            return back();
         }
-        return $output;
     }
 
     public function getParts(Request $request)
     {
         if ($request->ajax()) {
-            $parts = Part::where('model_id', $request->modelId)->get();
+            $parts = Part::whereModelId($request->modelId)->get();
             $output = getData($parts);
+            return $output;
+        } else {
+            return back();
         }
-        return $output;
     }
 }

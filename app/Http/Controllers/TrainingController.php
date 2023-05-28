@@ -26,8 +26,9 @@ class TrainingController extends Controller
 
     public function view($trainingId)
     {
-        $trainings = TrainingVideo::with(['user'])->where('training_id', $trainingId)->orderBy('id', 'DESC')->paginate(10);
+        $trainings = TrainingVideo::with(['user'])->whereTrainingId($trainingId)->latest('id')->paginate(10);
         if (!$trainings) return redirect()->back()->with('wrong', 'Sorry, Something is wrong please try again!!');
+
         $modelName = 'TrainingVideo';
         return view('training.view', compact('trainings', 'modelName'));
     }
@@ -53,11 +54,11 @@ class TrainingController extends Controller
     public function store_training_video(Request $request, $modelName)
     {
         $request->validate([
-            'video' => 'required|',
+            'video' => 'required|mimetypes:video/mp4,video/mpeg,video/quicktime',
             'training' => 'required|',
         ]);
 
-        $training = Training::where('id', $request->training)->first();
+        $training = Training::whereId($request->training)->first();
         if (!$training) return redirect()->back()->with('wrong', 'Sorry, Something is wrong please try again!!');
 
 
@@ -86,7 +87,7 @@ class TrainingController extends Controller
 
     public function update(Request $request)
     {
-        $training = Training::where('id', $request->id)->first();
+        $training = Training::whereId($request->id)->first();
         if (!$training) return redirect()->back()->with('wrong', 'Sorry, Something is wrong please try again!!');
 
         try {
@@ -105,7 +106,7 @@ class TrainingController extends Controller
     public function delete_training(Request $request)
     {
 
-        $training = Training::where('id', $request->id)->first();
+        $training = Training::whereId($request->id)->first();
         if (!$training) return redirect()->back()->with('wrong', 'Sorry, Something is wrong please try again!!');
 
         try {

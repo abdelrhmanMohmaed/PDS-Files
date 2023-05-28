@@ -9,6 +9,7 @@ use App\Models\Pdsfile;
 use App\Models\Qcp;
 use App\Models\TrainingVideo;
 use App\Models\Video;
+use Carbon\Carbon;
 
 function getData($models)
 {
@@ -36,71 +37,38 @@ function uploadImage($folder, $image)
 
 function selectModel($modelName)
 {
-    switch ($modelName) {
-        case 'Packfile':
-            $model = new Packfile;
-            break;
-        case 'Pdsfile':
-            $model = new Pdsfile;
-            break;
-        case 'Workfile':
-            $model = new Workfile;
-            break;
-        case 'Video':
-            $model = new Video;
-            break;
-        case 'TrainingVideo':
-            $model = new TrainingVideo;
-            break;
-        case 'QCP':
-            $model = new Qcp;
-            break;
-        case 'CarePoint':
-            $model = new CarePoint;
-            break;
-        case 'Measurement':
-            $model = new Measurement;
-            break;
-        case 'Gauges':
-            $model = new Gauges;
-            break;
-        default:
-            return back();
-            break;
-    }
-    return $model;
+    $array = [
+        'Packfile' => Packfile::class,
+        'Pdsfile' => Pdsfile::class,
+        'Workfile' => Workfile::class,
+        'Video' => Video::class,
+        'TrainingVideo' => TrainingVideo::class,
+        'QCP' => QCP::class,
+        'CarePoint' => CarePoint::class,
+        'Measurement' => Measurement::class,
+        'Gauges' => Gauges::class,
+    ];
+
+    return isset($array[$modelName]) ? new $array[$modelName] : back();
 }
 
 function productionAnalysis($request)
 {
     @$week = $request->week;
-    if (@$week) {
-        $start = $week;
-        $currentWeek = date('W');
-        $counter =  $start;
+    $currentWeek = Carbon::now()->weekOfYear;
 
-        while ($counter <= $currentWeek) {
-            $xaxis[] =  "WK-" . $counter;
-            $pdsConut[] = Pdsfile::where('week',  '<=', $counter)->count() ?? 0;
-            $workConut[] = Workfile::where('week', '<=', $counter)->count() ?? 0;
-            $packConut[] = Packfile::where('week',  '<=', $counter)->count() ?? 0;
-            $videoConut[] = Video::where('week',  '<=', $counter)->count() ?? 0;
-            $counter = $counter + 1;
-        }
-    } else {
-        $start = date('1');
-        $currentWeek = date('W');
-        $counter =  $start;
+    (@$week) ? $start = $week : $start = date('1');
+    $counter =  $start;
 
-        while ($counter <= $currentWeek) {
-            $xaxis[] = "WK-" . $counter;
-            $pdsConut[] = Pdsfile::where('week',  '<=', $counter)->count() ?? 0;
-            $workConut[] = Workfile::where('week', '<=', $counter)->count() ?? 0;
-            $packConut[] = Packfile::where('week',  '<=', $counter)->count() ?? 0;
-            $videoConut[] = Video::where('week',  '<=', $counter)->count() ?? 0;
-            $counter = $counter + 1;
-        }
+    while ($counter <= $currentWeek) {
+        $xaxis[] = "WK-" . $counter;
+        $pdsConut[] = Pdsfile::where('week', '<=', $counter)->count() ?? 0;
+        $workConut[] = Workfile::where('week', '<=', $counter)->count() ?? 0;
+        $packConut[] = Packfile::where('week', '<=', $counter)->count() ?? 0;
+        $videoConut[] = Video::where('week', '<=', $counter)->count() ?? 0;
+        $counter = $counter + 1;
     }
+
     return response()->json([
         'xaxis' => ['weeks' => $xaxis],
         'series' => [
@@ -115,33 +83,20 @@ function productionAnalysis($request)
 function QualityAnalysis($request)
 {
     @$week = $request->week;
-    if (@$week) {
-        $start = $week;
-        $currentWeek = date('W');
-        $counter =  $start;
+    $currentWeek = Carbon::now()->weekOfYear;
 
-        while ($counter <= $currentWeek) {
-            $xaxis[] =  "WK-" . $counter;
-            $carePointCount[] = CarePoint::where('week',  '<=', $counter)->count() ?? 0;
-            $qcpConut[] = Qcp::where('week', '<=', $counter)->count() ?? 0;
-            $measurementConut[] = Measurement::where('week',  '<=', $counter)->count() ?? 0;
-            $gaugesConut[] = Gauges::where('week',  '<=', $counter)->count() ?? 0;
-            $counter = $counter + 1;
-        }
-    } else {
-        $start = date('1');
-        $currentWeek = date('W');
-        $counter =  $start;
+    (@$week) ? $start = $week : $start = date('1');
+    $counter =  $start;
 
-        while ($counter <= $currentWeek) {
-            $xaxis[] = "WK-" . $counter;
-            $carePointCount[] = CarePoint::where('week',  '<=', $counter)->count() ?? 0;
-            $qcpConut[] = Qcp::where('week', '<=', $counter)->count() ?? 0;
-            $measurementConut[] = Measurement::where('week',  '<=', $counter)->count() ?? 0;
-            $gaugesConut[] = Gauges::where('week',  '<=', $counter)->count() ?? 0;
-            $counter = $counter + 1;
-        }
+    while ($counter <= $currentWeek) {
+        $xaxis[] = "WK-" . $counter;
+        $carePointCount[] = CarePoint::where('week',  '<=', $counter)->count() ?? 0;
+        $qcpConut[] = Qcp::where('week', '<=', $counter)->count() ?? 0;
+        $measurementConut[] = Measurement::where('week',  '<=', $counter)->count() ?? 0;
+        $gaugesConut[] = Gauges::where('week',  '<=', $counter)->count() ?? 0;
+        $counter = $counter + 1;
     }
+
     return response()->json([
         'xaxis' => ['weeks' => $xaxis],
         'series' => [

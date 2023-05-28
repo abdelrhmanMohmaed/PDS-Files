@@ -16,7 +16,7 @@ class VideoController extends Controller
     public function show(Part $part, $modelName)
     {
         $model = selectModel($modelName);
-        $files = $model->where('part_id', $part->id)->orderBy('id', 'DESC')->paginate(10);
+        $files = $model->wherePartId($part->id)->latest('id')->paginate(10);
 
         return view('web.files.show_video', compact(['files', 'modelName']));
     }
@@ -34,7 +34,7 @@ class VideoController extends Controller
         }
 
         $model = selectModel($modelName);
-        $week = date("W", strtotime(Carbon::now()));
+        $week = Carbon::now()->weekOfYear;
 
         try {
             $model->file = $filePath;
@@ -59,8 +59,7 @@ class VideoController extends Controller
     public function download($id, $modelName, Request $request)
     {
         $model = selectModel($modelName);
-        $file = $model->where('id', $id)->first();
-        if(!$file) return abort(404);
+        $file = $model->findOrFail($id);
 
         $path = "videos/" . $modelName . '/' . $file->file;
 
@@ -80,7 +79,7 @@ class VideoController extends Controller
             'title' => 'required|unique:videos,title',
         ]);
         $model = selectModel($request->name);
-        $model->where('id', $request->file_id)->update(['title' => $request->title]);
+        $model->whereId($request->file_id)->update(['title' => $request->title]);
 
         $request->session()->flash('success', 'Title updated successfully');
         return back();
@@ -89,8 +88,7 @@ class VideoController extends Controller
     public function delete(Request $request)
     {
         $model = selectModel($request->name);
-        $file = $model->where('id', $request->file_id)->first();
-        if(!$file) return abort(404);
+        $file = $model->findOrFail($request->file_id);
 
         $path = "videos/" . $request->name . '/' . $file->file;
 
@@ -112,10 +110,8 @@ class VideoController extends Controller
     public function watch($id, $modelName)
     {
         $model = selectModel($modelName);
-        $file = $model->where('id', $id)->first();
-        if(!$file) return abort(404);
+        $file = $model->findOrFail($id);
 
-
-        return view('web.files.watch', compact(['file','modelName']));
+        return view('web.files.watch', compact(['file', 'modelName']));
     }
 }

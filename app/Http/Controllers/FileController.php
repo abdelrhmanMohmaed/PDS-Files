@@ -18,22 +18,21 @@ class FileController extends Controller
     public function showfile(Part $part, $modelName)
     {
         $model = selectModel($modelName);
+        $files = $model->wherePartId($part->id)->latest('id')->paginate(10);
         $machines = Machine::get();
 
-        $files = $model->where('part_id', $part->id)->orderBy('id', 'DESC')->paginate(10);
         return view('web.files.show_file', compact(['files', 'modelName', 'machines']));
     }
 
     public function store(Part $part, $modelName, FileRequest $request)
     {
-
         if ($request->file('file')) {
             $path = 'files/' . $modelName . '/';
             $filePath = uploadImage($path, $request->file);
         }
 
         $model = selectModel($modelName);
-        $week = date("W", strtotime(Carbon::now()));
+        $week = Carbon::now()->weekOfYear;
 
         try {
             $model->file = $filePath;
@@ -43,12 +42,12 @@ class FileController extends Controller
             // check a machine_id added or no 
             if ($request->machine_id) {
                 $request->validate([
-                    'machine_id'=>'required|exists:machines,id', 
+                    'machine_id' => 'required|exists:machines,id',
                 ]);
                 $model->machine_id = $request->machine_id;
             }
 
-            $model->week =  $week;
+            $model->week = $week;
             $model->save();
 
             event(new FileAdded($model, $modelName));
@@ -68,9 +67,9 @@ class FileController extends Controller
             'machine' => 'required|exists:machines,id',
         ]);
 
-        $model = selectModel($request->name);
-
-        $model->where('id', $request->id)->update([
+        $model = selectModel($request->name); 
+        
+        $model->whereId($request->id)->update([
             'machine_id' => $request->machine
         ]);
 
@@ -81,8 +80,7 @@ class FileController extends Controller
     public function download($id, $modelName, Request $request)
     {
         $model = selectModel($modelName);
-        $file = $model->where('id', $id)->first();
-        if(!$file) return abort(404);
+        $file = $model->findOrFail($id); 
 
         $path = "files/" . $modelName . '/' . $file->file;
 
@@ -99,8 +97,7 @@ class FileController extends Controller
     public function delete(Request $request)
     {
         $model = selectModel($request->name);
-        $file = $model->where('id', $request->file_id)->first();
-        if(!$file) return abort(404);
+        $file = $model->findOrFail($request->file_id); 
 
         $path = "files/" . $request->name . '/' . $file->file;
 

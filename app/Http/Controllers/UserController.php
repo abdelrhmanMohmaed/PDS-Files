@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\NewUserAdded;
 use App\Http\Requests\UserRequest;
 use App\Models\Role;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Hash; 
 
 class UserController extends Controller
 {
@@ -54,14 +52,14 @@ class UserController extends Controller
             'password' => ['required', 'string', 'min:8'],
         ]);
 
-        if (isset($request->password) && $request->password != null) {
+        if (isset($request->password) && $request->password != null)
             $data['password'] = Hash::make($request->password);
-        }
+
         // $data['email'] = $request->email;
         $data['role_id'] = $user->role_id;
         try {
             $user->update($data);
-            
+
             Auth::logout();
             return redirect()->route('login');
         } catch (Exception $e) {

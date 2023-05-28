@@ -151,33 +151,25 @@
                                                         </ul>
                                                     </a>
 
-                                                    @if (Auth::user()->id == 2)
-                                                        <a class="dropdown-item secend-meno-create" href="#">
-                                                            Create
-                                                            <i class="float-end fa-solid fa-arrow-right text-black-50"></i>
-                                                            <ul class="dropdown-menoo-create border w-100 rounded">
-                                                                <li>
-                                                                    <a class="dropdown-item"
-                                                                        href="{{ route('category.new') }}">
-                                                                        Categories
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item"
-                                                                        href="{{ route('training.index') }}">Training</a>
-                                                                </li>
-                                                            </ul>
-                                                        </a>
-                                                        <a class="dropdown-item" href="{{ route('training.show') }}">
-                                                            Training Tab
-                                                        </a>
-                                                    @else
-                                                        <a class="dropdown-item" href="{{ route('category.new') }}">
-                                                            Categories
-                                                        </a>
-                                                    @endif
-
-
+                                                    <a class="dropdown-item secend-meno-create" href="#">
+                                                        Create
+                                                        <i class="float-end fa-solid fa-arrow-right text-black-50"></i>
+                                                        <ul class="dropdown-menoo-create border w-100 rounded">
+                                                            <li>
+                                                                <a class="dropdown-item"
+                                                                    href="{{ route('category.new') }}">
+                                                                    Categories
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="dropdown-item"
+                                                                    href="{{ route('training.index') }}">Training</a>
+                                                            </li>
+                                                        </ul>
+                                                    </a>
+                                                    <a class="dropdown-item" href="{{ route('training.show') }}">
+                                                        Training Tab
+                                                    </a>
 
                                                     <a class="dropdown-item" href="{{ route('user.show') }}">
                                                         Edit Profile
@@ -302,7 +294,7 @@
 
             }
         }
-        
+
         function removeDisabled(change_for, first_id, second_id) {
             $('body').on('change', '#' + change_for, function() {
 
@@ -311,7 +303,6 @@
             });
         }
         //end use to show and hide models in training and category
-
     </script>
 
     @yield('script')
