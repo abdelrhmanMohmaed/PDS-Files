@@ -116,6 +116,6 @@ class VideoController extends Controller
         $model = selectModel($modelName);
         $file = $model->findOrFail($id);
 
-        return view('web.files.watch', compact('file'));
+        return view('web.files.watch', compact('file','modelName'));
     }
 }
