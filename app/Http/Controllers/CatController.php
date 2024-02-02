@@ -15,8 +15,8 @@ class CatController extends Controller
 {
     public function index()
     {
-        $companies = Company::get();
         $models = ModelCar::get();
+        $companies = Company::get();
         return view('cat.index', compact('companies', 'models'));
     }
 
